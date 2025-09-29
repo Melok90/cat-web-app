@@ -738,7 +738,7 @@ select.form-control {
 }
 
 /* END PERPLEXITY DESIGN SYSTEM */
-/* ÐÐ°ÑÑÐ¾Ð¼Ð½ÑÐµ ÑÑÐ¸Ð»Ð¸ Ð´Ð»Ñ Ð¿ÑÐ¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ Ð³Ð¸Ð´Ð° Ð¿Ð¾ Ð¿Ð¾ÑÐ¾Ð´Ð°Ð¼ ÐºÐ¾ÑÐµÐº */
+/* Кастомные стили для приложения гида по породам кошек */
 
 .header {
   background: linear-gradient(135deg, var(--color-bg-1), var(--color-bg-3));
@@ -764,7 +764,7 @@ select.form-control {
   padding: var(--space-32) 0;
 }
 
-/* ÐÐ¾Ð¸ÑÐº Ð¸ ÑÐ¸Ð»ÑÑÑÑ */
+/* Поиск и фильтры */
 .search-section {
   margin-bottom: var(--space-32);
 }
@@ -787,14 +787,14 @@ select.form-control {
   }
 }
 
-/* Ð¡ÐµÐºÑÐ¸Ð¸ */
+/* Секции */
 .section-title {
   text-align: center;
   margin-bottom: var(--space-32);
   color: var(--color-text);
 }
 
-/* Ð¥Ð»ÐµÐ±Ð½ÑÐµ ÐºÑÐ¾ÑÐºÐ¸ */
+/* Хлебные крошки */
 .breadcrumb {
   margin-bottom: var(--space-24);
   display: flex;
@@ -802,7 +802,7 @@ select.form-control {
   flex-wrap: wrap;
 }
 
-/* Ð¡ÐµÑÐºÐ° ÐºÐ°ÑÐµÐ³Ð¾ÑÐ¸Ð¹ */
+/* Сетка категорий */
 .categories-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -846,7 +846,7 @@ select.form-control {
   margin: 0;
 }
 
-/* Ð¡ÐµÑÐºÐ° Ð¿Ð¾ÑÐ¾Ð´ */
+/* Сетка пород */
 .breeds-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -911,7 +911,7 @@ select.form-control {
   color: var(--color-primary);
 }
 
-/* ÐÐµÑÐ°Ð»Ð¸ Ð¿Ð¾ÑÐ¾Ð´Ñ */
+/* Детали породы */
 .breed-details {
   max-width: 800px;
   margin: 0 auto;
@@ -965,7 +965,7 @@ select.form-control {
   line-height: 1.6;
 }
 
-/* ÐÐ¸ÑÐ¾Ð¼Ð½Ð¸ÐºÐ¸ */
+/* Питомники */
 .nurseries-list {
   list-style: none;
   padding: 0;
@@ -1010,7 +1010,7 @@ select.form-control {
   text-decoration: underline;
 }
 
-/* Instagram Ð°ÐºÐºÐ°ÑÐ½ÑÑ */
+/* Instagram аккаунты */
 .instagram-list {
   display: flex;
   flex-wrap: wrap;
@@ -1033,7 +1033,7 @@ select.form-control {
   color: var(--color-btn-primary-text);
 }
 
-/* ÐÑÑÑÑÑÑÐ²Ð¸Ðµ ÑÐµÐ·ÑÐ»ÑÑÐ°ÑÐ¾Ð² */
+/* Отсутствие результатов */
 .no-results {
   text-align: center;
   padding: var(--space-32);
@@ -1045,7 +1045,7 @@ select.form-control {
   color: var(--color-text);
 }
 
-/* ÐÐ¾Ð´Ð²Ð°Ð» */
+/* Подвал */
 .footer {
   background: var(--color-surface);
   border-top: 1px solid var(--color-border);
@@ -1055,12 +1055,12 @@ select.form-control {
   font-size: var(--font-size-sm);
 }
 
-/* Ð£ÑÐ¸Ð»Ð¸ÑÑ Ð´Ð»Ñ ÑÐºÑÑÑÐ¸Ñ */
+/* Утилиты для скрытия */
 .hidden {
   display: none !important;
 }
 
-/* ÐÐ´Ð°Ð¿ÑÐ¸Ð²Ð½Ð¾ÑÑÑ */
+/* Адаптивность */
 @media (max-width: 768px) {
   .header__title {
     font-size: var(--font-size-3xl);
@@ -1084,7 +1084,7 @@ select.form-control {
   }
 }
 
-/* ÐÐ½Ð¸Ð¼Ð°ÑÐ¸Ð¸ */
+/* Анимации */
 .breed-card,
 .category-card {
   animation: fadeInUp 0.3s ease-out;
@@ -1101,13 +1101,13 @@ select.form-control {
   }
 }
 
-/* Ð¡Ð¾ÑÑÐ¾ÑÐ½Ð¸Ñ Ð·Ð°Ð³ÑÑÐ·ÐºÐ¸ */
+/* Состояния загрузки */
 .loading {
   opacity: 0.5;
   pointer-events: none;
 }
 
-/* ÐÐ¾Ð´ÑÐ²ÐµÑÐºÐ° Ð¿Ð¾Ð¸ÑÐºÐ¾Ð²Ð¾Ð³Ð¾ ÑÐ¾Ð²Ð¿Ð°Ð´ÐµÐ½Ð¸Ñ */
+/* Подсветка поискового совпадения */
 .highlight {
   background-color: var(--color-bg-2);
   padding: var(--space-1) var(--space-2);
