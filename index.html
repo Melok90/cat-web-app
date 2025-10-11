@@ -1,108 +1,794 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Гид по породам кошек</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="description" content="Гид по породам кошек - подберите идеальную породу для вашего дома. Поиск, категории, подробные описания и подбор породы по характеристикам." />
+  <meta name="keywords" content="кошки, породы кошек, выбор кошки, мейн-кун, британская, сфинкс, бенгальская" />
+  <meta name="theme-color" content="#2ea56a" />
+  <title>Гид по породам кошек</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- Critical CSS inline for faster loading -->
+  <style>
+    :root{
+      --bg:#0f1113;--surface:#171a1c;--muted:#9aa3ad;--text:#e9eef2;--primary:#2ea56a;--primary-700:#1f8b55;--border:#252a2e;
+      --radius:14px;--radius-lg:18px;--gap-2:8px;--gap-3:12px;--gap-4:16px;--gap-5:20px;--gap-6:24px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text); background:linear-gradient(180deg,#0f1113 0%,#111416 100%);
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    a{color:inherit}
+    .container{max-width:1100px;margin:0 auto;padding:0 16px}
+    .page{display:none;min-height:100dvh}
+    .page.active{display:flex;flex-direction:column}
+    header.site{padding:32px 0 8px}
+    .title{font-size:32px;font-weight:800;margin:0 0 6px}
+    .subtitle{margin:0 0 18px;color:var(--muted)}
+    .search-row{display:flex;gap:var(--gap-3);align-items:center;flex-wrap:wrap}
+    .search{flex:1;min-width:200px;display:flex;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    .search input{
+      width:100%;padding:14px 14px 14px 44px;background:transparent;border:0;color:var(--text);outline:none;
+      background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%239AA3AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
+      background-repeat:no-repeat;background-position:12px center;font-size:16px;
+    }
+    .btn{display:inline-flex;align-items:center;justify-content:center;
+      gap:10px;padding:12px 16px;border-radius:12px;border:1px solid var(--border);background:var(--surface);
+      color:var(--text);cursor:pointer;transition:.15s ease;white-space:nowrap;font-size:16px;min-height:44px;
+    }
+    .btn--primary{background:var(--primary);border-color:transparent}
+    .btn:hover{transform:translateY(-1px)}
+    .btn--primary:hover{background:var(--primary-700)}
+    .btn:active{transform:translateY(0)}
+    .grid{display:flex;flex-wrap:wrap;gap:var(--gap-6)}
+    .card{flex:1 1 280px;max-width:calc(50% - var(--gap-6)/2);display:flex;flex-direction:column;gap:12px;
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;transition:.15s ease;
+      cursor:pointer;touch-action:manipulation;
+    }
+    .card:hover{transform:translateY(-2px)}
+    .card:active{transform:translateY(0)}
+    .ph{height:200px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;color:#a3aab3;overflow:hidden}
+    .ph img{width:100%;height:100%;object-fit:contain;border-radius:12px}
+    .card h3{margin:0 0 6px;font-size:18px;font-weight:600}
+    .muted{color:var(--muted);font-size:14px;line-height:1.4}
+    .chip{align-self:flex-start;padding:6px 10px;border-radius:999px;border:1px solid #355; background:#1a2126; color:#86d3ff;font-size:12px}
+    section{display:flex;flex-direction:column;gap:var(--gap-5);margin:22px 0}
+    .section-title{font-size:20px;margin:0;font-weight:600}
+    .footer{margin-top:auto;border-top:1px solid var(--border);padding:20px 0;color:var(--muted);font-size:14px}
+    .topbar{display:flex;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap}
+    .topbar .back{padding:10px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--border);min-height:44px;color:var(--text)}
+    .detail-hero{display:flex;gap:20px;flex-wrap:wrap}
+    .hero-img{flex:1 1 320px;height:260px;background:#fff;border-radius:14px}
+    .hero-info{flex:2 1 320px;display:flex;flex-direction:column;gap:10px}
+    .cols{display:flex;gap:var(--gap-6);flex-wrap:wrap}
+    .box{flex:1 1 320px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px}
+    .list{display:flex;flex-direction:column;gap:12px}
+    .breeder{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+    .link{color:#86d3ff;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+    .link:hover{text-decoration:underline}
+    .quiz{display:flex;flex-direction:column;gap:16px}
+    .q{display:flex;flex-direction:column;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px}
+    .opts{display:flex;flex-wrap:wrap;gap:10px}
+    .opt{padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:#15181a;cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:center;text-align:center;transition:.15s ease}
+    .opt input{display:none}
+    .opt.active,.opt:hover{background:#1a1f22;border-color:#2c3238}
+    .opt:active{transform:scale(0.98)}
+    
+    /* Mobile optimizations */
+    @media (max-width:840px){
+      .card{max-width:100%}
+      .ph{height:180px}
+      .title{font-size:28px}
+      .search-row{flex-direction:column;align-items:stretch}
+      .search{min-width:auto}
+      .btn{width:100%;justify-content:center}
+      .detail-hero{flex-direction:column}
+      .hero-img{flex:none;width:100%}
+      .cols{flex-direction:column}
+      .box{flex:none;width:100%}
+      .breeder{flex-direction:column;align-items:flex-start;gap:8px}
+      .opts{flex-direction:column}
+      .opt{width:100%}
+    }
+    
+    @media (max-width:480px){
+      .container{padding:0 12px}
+      header.site{padding:24px 0 8px}
+      .title{font-size:24px}
+      .card{padding:12px}
+      .ph{height:160px}
+      .btn{padding:14px 16px;font-size:16px}
+      .search input{padding:16px 16px 16px 48px;font-size:16px}
+      .topbar{gap:8px}
+      .topbar .back{padding:12px 14px}
+    }
+    
+    /* Performance optimizations */
+    .card,.btn,.opt{will-change:transform}
+    .card:hover,.btn:hover,.opt:hover{will-change:auto}
+    
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      .card,.btn,.opt{transition:none}
+      .card:hover,.btn:hover,.opt:hover{transform:none}
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f5f6f8;
+        --surface: #ffffff;
+        --text: #0b0c0d;
+        --muted: #6c727a;
+        --border: #e1e5e9;
+      }
+      .ph{background:#f8f9fa;color:#6c727a}
+      .hero-img{background:#f8f9fa}
+    }
+  </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <h1 class="header__title">🐾 Гид по породам кошек</h1>
-            <p class="header__subtitle">Найдите идеальную породу для вашего дома</p>
+  <main id="main" class="page active">
+    <div class="container">
+      <header class="site">
+        <h1 class="title">Гид по породам кошек</h1>
+        <p class="subtitle">Поможем найти идеальную породу для вашего дома</p>
+        <div class="search-row">
+          <div class="search"><input id="search" placeholder="Поиск по породам..." /></div>
         </div>
-    </header>
+        <button class="btn btn--primary" id="to-quiz-top" style="margin-top: 16px; width: 100%; max-width: 300px; margin-left: auto; margin-right: auto; display: block;">🔍 Подобрать породу</button>
+      </header>
 
-    <main class="main">
-        <!-- Поиск и фильтры -->
-        <section class="search-section">
-            <div class="container">
-                <div class="search-controls">
-                    <div class="search-box">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Поиск породы по названию...">
-                    </div>
-                    <div class="filter-box">
-                        <select id="suitabilityFilter" class="form-control">
-                            <option value="">Все породы</option>
-                            <option value="семьи с детьми">Для семей с детьми</option>
-                            <option value="пожилых">Для пожилых людей</option>
-                            <option value="активных людей">Для активных людей</option>
-                            <option value="квартир">Для квартир</option>
-                            <option value="частных домов">Для частных домов</option>
-                            <option value="аллергией">Для людей с аллергией</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Главная страница с категориями -->
-        <section id="categoriesView" class="categories-section">
-            <div class="container">
-                <h2 class="section-title">Выберите категорию пород</h2>
-                <div class="categories-grid" id="categoriesGrid">
-                    <!-- Категории будут добавлены через JavaScript -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Список пород в категории -->
-        <section id="breedsView" class="breeds-section hidden">
-            <div class="container">
-                <div class="breadcrumb">
-                    <button id="backToCategories" class="btn btn--outline">← Все категории</button>
-                </div>
-                <h2 id="categoryTitle" class="section-title"></h2>
-                <div class="breeds-grid" id="breedsGrid">
-                    <!-- Породы будут добавлены через JavaScript -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Детальная информация о породе -->
-        <section id="breedDetailsView" class="breed-details-section hidden">
-            <div class="container">
-                <div class="breadcrumb">
-                    <button id="backToBreeds" class="btn btn--outline">← Назад к породам</button>
-                    <button id="backToCategoriesFromDetails" class="btn btn--outline">← Все категории</button>
-                </div>
-                <div class="breed-details" id="breedDetails">
-                    <!-- Детали породы будут добавлены через JavaScript -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Результаты поиска -->
-        <section id="searchResultsView" class="search-results-section hidden">
-            <div class="container">
-                <div class="breadcrumb">
-                    <button id="clearSearch" class="btn btn--outline">← Очистить поиск</button>
-                </div>
-                <h2 id="searchTitle" class="section-title">Результаты поиска</h2>
-                <div class="breeds-grid" id="searchResults">
-                    <!-- Результаты поиска будут добавлены через JavaScript -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Сообщение об отсутствии результатов -->
-        <section id="noResultsView" class="no-results-section hidden">
-            <div class="container">
-                <div class="no-results">
-                    <h3>Ничего не найдено</h3>
-                    <p>Попробуйте изменить запрос или выбрать другой фильтр</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Гид по породам кошек. Помогаем найти идеального питомца для каждой семьи.</p>
+      <section>
+        <h2 class="section-title">Категории пород</h2>
+        <div id="cats-cats" class="grid"></div>
+      </section>
+      
+      <section>
+        <h2 class="section-title">Кошки из базы данных</h2>
+        <div id="cat-list" class="cat-list-container"></div>
+      </section>
+      
+      <section>
+        <div id="search-grid" class="grid"></div>
+      </section>
+      
+      <footer class="footer">
+        <div class="container" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between">
+          <div>Контакты: hello@cats.example</div>
+          <div style="display:flex;gap:12px">
+            <a class="link" href="#" aria-label="Instagram">Instagram</a>
+            <a class="link" href="#" aria-label="Telegram">Telegram</a>
+            <a class="link" href="#" aria-label="VKontakte">VK</a>
+          </div>
         </div>
-    </footer>
+      </footer>
+    </div>
+  </main>
 
-    <script src="app.js"></script>
+  <section id="category" class="page">
+    <div class="container">
+      <div class="topbar">
+        <button class="back" id="back-main" aria-label="Назад к главной">← Назад</button>
+        <h2 id="cat-title" class="title" style="margin:0"></h2>
+      </div>
+      <div id="cat-grid" class="grid"></div>
+    </div>
+  </section>
+
+  <section id="detail" class="page">
+    <div class="container">
+      <div class="topbar">
+        <button class="back" id="back-category" aria-label="Назад к категории">← Категория</button>
+        <h2 id="detail-title" class="title" style="margin:0"></h2>
+      </div>
+
+      <div class="detail-hero">
+        <div class="hero-img" id="detail-image"></div>
+        <div class="hero-info">
+          <h3 id="detail-name" style="margin:0"></h3>
+          <div class="muted">Кем выведена: <span id="detail-origin"></span></div>
+          <div class="chip" id="detail-suitable"></div>
+        </div>
+      </div>
+
+      <div class="cols" style="margin-top:18px">
+        <div class="box">
+          <h4 style="margin:0 0 10px">Характер</h4>
+          <div id="detail-character" class="muted"></div>
+        </div>
+        <div class="box">
+          <h4 style="margin:0 0 10px">Особенности ухода</h4>
+          <div id="detail-care" class="muted"></div>
+        </div>
+        <div class="box">
+          <h4 style="margin:0 0 10px">Кому подходит</h4>
+          <div id="detail-suitable-detail" class="muted"></div>
+        </div>
+      </div>
+
+      <div class="box" style="margin-top:18px">
+        <h4 style="margin:0 0 10px">Питомники в России</h4>
+        <div id="detail-breeders" class="list"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quiz" class="page">
+    <div class="container">
+      <div class="topbar">
+        <button class="back" id="back-main-from-quiz" aria-label="Назад к главной">← Назад</button>
+        <h2 class="title" style="margin:0">Подбор породы</h2>
+      </div>
+      <div class="quiz" id="quiz-wrap"></div>
+      <div style="display:flex;gap:12px;margin-top:8px;flex-wrap:wrap">
+        <button class="btn" id="reset-quiz">Сбросить</button>
+        <button class="btn btn--primary" id="show-results">Показать результаты</button>
+      </div>
+      <section style="margin-top:20px">
+        <h3 class="section-title">Результаты</h3>
+        <div id="results-grid" class="grid"></div>
+      </section>
+    </div>
+  </section>
+
+  <script>
+    // Optimized JavaScript with performance improvements
+    const appData = {
+      categories: {
+        longhair: { name: "Длинношерстные породы" },
+        shorthair: { name: "Короткошерстные породы" },
+        hairless: { name: "Бесшерстные породы" },
+        exotic: { name: "Экзотические и редкие породы" }
+      },
+      breeds: [
+        // Длинношерстные породы
+        {
+          id:"maine_coon", category:"longhair", name:"Мейн-кун",
+          short:"Крупная дружелюбная порода с рысьими ушами.",
+          origin:"США, штат Мэн",
+          suitable:"Для активных семей с детьми",
+          character:"Дружелюбные, общительные, игривые, хорошо ладят с детьми.",
+          care:"Расчесывать 2–3 раза в неделю, простор для активности.",
+          suitableDetail:"Идеальны для семей, любящих активное общение с питомцем.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/main-kun.jpeg",
+          breeders:[
+            {name:"Русские гиганты", ig:"@russian_giants_mainecoon"},
+            {name:"Северный ветер", ig:"@north_wind_coons"}
+          ],
+          traits:{experience:"medium", space:"high", care:"medium", activity:"medium", children:"high", special_care:"medium", exotic:"low"}
+        },
+        {
+          id:"siberian", category:"longhair", name:"Сибирская кошка",
+          short:"Пушистая русская красавица с гипоаллергенной шерстью.",
+          origin:"Россия, Сибирь",
+          suitable:"Для семей с аллергией",
+          character:"Умные, преданные, игривые, хорошо ладят с детьми и животными.",
+          care:"Расчесывать 2–3 раза в неделю, особенно в период линьки.",
+          suitableDetail:"Отлично подходят для семей с детьми и другими животными.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/siberian.jpeg",
+          breeders:[
+            {name:"Сибирские красавицы", ig:"@siberian_beauties"},
+            {name:"Морозные мурлыки", ig:"@frosty_purrs"}
+          ],
+          traits:{experience:"medium", space:"medium", care:"medium", activity:"medium", children:"high", special_care:"low", exotic:"low"}
+        },
+        {
+          id:"persian", category:"longhair", name:"Персидская кошка",
+          short:"Роскошная длинношерстная порода с плоской мордочкой.",
+          origin:"Персия (Иран)",
+          suitable:"Для спокойных домов",
+          character:"Спокойные, ласковые, тихие, любят комфорт и покой.",
+          care:"Ежедневное расчесывание, уход за глазами и носом.",
+          suitableDetail:"Идеальны для спокойных домов без маленьких детей.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/persian.jpeg",
+          breeders:[
+            {name:"Персидские принцессы", ig:"@persian_princesses"},
+            {name:"Роскошные мурлыки", ig:"@luxury_purrs"}
+          ],
+          traits:{experience:"medium", space:"low", care:"high", activity:"low", children:"low", special_care:"high", exotic:"low"}
+        },
+        
+        // Короткошерстные породы
+        {
+          id:"british", category:"shorthair", name:"Британская короткошерстная",
+          short:"Спокойная плюшевая классика с круглыми глазами.",
+          origin:"Великобритания", 
+          suitable:"Для занятых людей",
+          character:"Сдержанные, преданные, терпеливые, независимые.",
+          care:"Простой уход: вычесывание 1–2 раза в неделю.",
+          suitableDetail:"Подходит для небольших квартир и размеренного ритма.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/british.jpeg",
+          breeders:[{name:"Королевские британцы", ig:"@royal_british_moscow"}],
+          traits:{experience:"low", space:"low", care:"low", activity:"low", children:"medium", special_care:"low", exotic:"low"}
+        },
+        {
+          id:"russian_blue", category:"shorthair", name:"Русская голубая",
+          short:"Элегантная кошка с серебристо-голубой шерстью.",
+          origin:"Россия, Архангельск",
+          suitable:"Для тихих домов",
+          character:"Спокойные, умные, преданные, немного застенчивые.",
+          care:"Минимальный уход, шерсть не линяет сильно.",
+          suitableDetail:"Отлично подходят для квартир и тихих домов.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/russian_blue.jpeg",
+          breeders:[
+            {name:"Северные голубки", ig:"@northern_blues"},
+            {name:"Архангельские красавицы", ig:"@arkhangelsk_beauties"}
+          ],
+          traits:{experience:"low", space:"low", care:"low", activity:"low", children:"medium", special_care:"low", exotic:"low"}
+        },
+        {
+          id:"abyssinian", category:"shorthair", name:"Абиссинская кошка",
+          short:"Активная и любознательная кошка с тикированной шерстью.",
+          origin:"Эфиопия (Абиссиния)",
+          suitable:"Для активных семей",
+          character:"Очень активные, любознательные, игривые, умные.",
+          care:"Минимальный уход, короткая шерсть.",
+          suitableDetail:"Нуждаются в активности и внимании, не подходят для ленивых хозяев.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/abissin.jpeg",
+          breeders:[
+            {name:"Абиссинские принцессы", ig:"@abyssinian_princesses"},
+            {name:"Эфиопские красавицы", ig:"@ethiopian_beauties"}
+          ],
+          traits:{experience:"medium", space:"medium", care:"low", activity:"high", children:"high", special_care:"low", exotic:"medium"}
+        },
+        
+        // Бесшерстные породы
+        {
+          id:"sphynx", category:"hairless", name:"Канадский сфинкс",
+          short:"Тёплая кожа и экстравертный характер без шерсти.",
+          origin:"Канада", 
+          suitable:"Для людей с аллергией",
+          character:"Очень общительные и ласковые, любят внимание.",
+          care:"Уход за кожей, контроль температуры, регулярные ванны.",
+          suitableDetail:"Нуждаются в тепле и внимании, дружелюбны к детям.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/sfinks.jpeg",
+          breeders:[{name:"Лунные кошки", ig:"@moon_sphynx_cats"}],
+          traits:{experience:"high", space:"medium", care:"high", activity:"medium", children:"medium", special_care:"high", exotic:"high"}
+        },
+        
+        // Экзотические породы
+        {
+          id:"bengal", category:"exotic", name:"Бенгальская кошка",
+          short:"Домашний леопард — активная и умная с диким окрасом.",
+          origin:"США", 
+          suitable:"Для опытных владельцев",
+          character:"Очень активны и любознательны, нуждаются в стимуляции.",
+          care:"Много активности, короткая шерсть, игровые комплексы.",
+          suitableDetail:"Лучше в просторном доме, необходима стимуляция.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/bengal.jpeg",
+          breeders:[{name:"Дикая красота", ig:"@wild_beauty_bengals"}],
+          traits:{experience:"high", space:"high", care:"low", activity:"high", children:"low", special_care:"medium", exotic:"high"}
+        },
+        {
+          id:"toyger", category:"exotic", name:"Тойгер",
+          short:"Миниатюрный тигр с полосатым окрасом.",
+          origin:"США",
+          suitable:"Для любителей экзотики",
+          character:"Активные, игривые, дружелюбные, хорошо ладят с детьми.",
+          care:"Стандартный уход, много игр и активности.",
+          suitableDetail:"Отлично подходят для семей с детьми, любят игры.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/toiger.jpeg",
+          breeders:[
+            {name:"Мини-тигры", ig:"@mini_tigers"},
+            {name:"Полосатые красавцы", ig:"@striped_beauties"}
+          ],
+          traits:{experience:"medium", space:"medium", care:"low", activity:"high", children:"high", special_care:"low", exotic:"high"}
+        }
+      ],
+      questions:[
+        {id:"experience", q:"Ваш опыт содержания кошек?", opts:[
+          {v:"low",t:"Новичок"},{v:"medium",t:"Есть опыт"},{v:"high",t:"Эксперт"}
+        ]},
+        {id:"space", q:"Размер жилья?", opts:[
+          {v:"low",t:"Малая квартира"},{v:"medium",t:"Большая квартира"},{v:"high",t:"Дом"}
+        ]},
+        {id:"care", q:"Время на уход?", opts:[
+          {v:"low",t:"Минимум"},{v:"medium",t:"Средне"},{v:"high",t:"Много"}
+        ]},
+        {id:"activity", q:"Уровень активности?", opts:[
+          {v:"low",t:"Спокойная"},{v:"medium",t:"Умеренная"},{v:"high",t:"Очень активная"}
+        ]},
+        {id:"children", q:"Дети в семье?", opts:[
+          {v:"low",t:"Нет"},{v:"medium",t:"Дошкольники"},{v:"high",t:"Школьники/подростки"}
+        ]},
+        {id:"special_care", q:"Готовы к особому уходу?", opts:[
+          {v:"low",t:"Нет"},{v:"medium",t:"Немного"},{v:"high",t:"Готов к сложному уходу"}
+        ]},
+        {id:"exotic", q:"Нужна ли необычность?", opts:[
+          {v:"low",t:"Обычная"},{v:"medium",t:"Немного необычная"},{v:"high",t:"Очень экзотическая"}
+        ]}
+      ]
+    };
+
+    // State
+    let currentCategory=null, quizAnswers={};
+
+    // DOM Elements - cached for performance
+    const pages = {main: byId("main"), category: byId("category"), detail: byId("detail"), quiz: byId("quiz")};
+    const searchInput = byId("search");
+    const searchGrid = byId("search-grid");
+    const catsCats = byId("cats-cats");
+    const catTitle = byId("cat-title");
+    const catGrid = byId("cat-grid");
+    const detailTitle = byId("detail-title");
+    const detailImage = byId("detail-image");
+    const detailName = byId("detail-name");
+    const detailOrigin = byId("detail-origin");
+    const detailSuitable = byId("detail-suitable");
+    const detailChar = byId("detail-character");
+    const detailCare = byId("detail-care");
+    const detailSuitDet = byId("detail-suitable-detail");
+    const detailBreeders = byId("detail-breeders");
+    const quizWrap = byId("quiz-wrap");
+    const resultsGrid = byId("results-grid");
+
+    // Helpers
+    function byId(id){return document.getElementById(id)}
+    function show(page){
+      Object.values(pages).forEach(p=>p.classList.remove("active"));
+      pages[page].classList.add("active");
+      window.scrollTo({top:0,behavior:"smooth"});
+    }
+    const allBreeds = () => appData.breeds;
+
+    // Debounced search for better performance
+    let searchTimeout;
+    function debounce(func, wait) {
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(searchTimeout);
+          func(...args);
+        };
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(later, wait);
+      };
+    }
+
+    // Render categories
+    function renderMainCategories(){
+      if (!catsCats) return;
+      catsCats.innerHTML = "";
+      const cats = [
+        {id:"longhair", title:appData.categories.longhair.name},
+        {id:"shorthair", title:appData.categories.shorthair.name},
+        {id:"hairless", title:appData.categories.hairless.name},
+        {id:"exotic", title:appData.categories.exotic.name}
+      ];
+      cats.forEach(cat=>{
+        const el = card({
+          title:cat.title,
+          subtitle:"Нажмите, чтобы открыть",
+          onClick:()=>openCategory(cat.id)
+        });
+        catsCats.appendChild(el);
+      });
+    }
+
+    // Generic card with accessibility improvements
+    function card({title, subtitle, onClick, chip, image}){
+      const el=document.createElement("article"); 
+      el.className="card"; 
+      el.tabIndex=0;
+      el.setAttribute('role', 'button');
+      el.setAttribute('aria-label', `${title}. ${subtitle}`);
+      
+      const ph=document.createElement("div"); 
+      ph.className="ph"; 
+      
+      if (image) {
+        const img = document.createElement("img");
+        img.src = image;
+        img.alt = title;
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "12px";
+        img.style.maxWidth = "100%";
+        img.style.maxHeight = "100%";
+        // Обработка ошибки загрузки изображения
+        img.onerror = function() {
+          ph.textContent = "Фото";
+          ph.setAttribute('aria-hidden', 'true');
+        };
+        ph.appendChild(img);
+      } else {
+        ph.textContent="Фото";
+        ph.setAttribute('aria-hidden', 'true');
+      }
+      
+      const h3=document.createElement("h3"); 
+      h3.textContent=title;
+      
+      const p=document.createElement("div"); 
+      p.className="muted"; 
+      p.textContent=subtitle||"";
+      
+      el.appendChild(ph); 
+      el.appendChild(h3); 
+      
+      if(chip){
+        const c=document.createElement("div"); 
+        c.className="chip"; 
+        c.textContent=chip; 
+        el.appendChild(c);
+      } 
+      
+      el.appendChild(p);
+      
+      // Event listeners with passive option for better performance
+      el.addEventListener("click",onClick, {passive: true}); 
+      el.addEventListener("keypress",e=>{if(e.key==="Enter"||e.key===" ") onClick()}, {passive: true});
+      
+      return el;
+    }
+
+    // Optimized search with debouncing
+    const debouncedSearch = debounce((query) => {
+      const results = query ? allBreeds().filter(b=>
+        b.name.toLowerCase().includes(query)||b.short.toLowerCase().includes(query)
+      ) : [];
+      renderBreedCards(results, searchGrid, true);
+    }, 300);
+
+    searchInput.addEventListener("input", (e)=>{
+      debouncedSearch(e.target.value.trim().toLowerCase());
+    });
+
+    // Category
+    function openCategory(id){
+      currentCategory=id;
+      catTitle.textContent = appData.categories[id].name;
+      const items = allBreeds().filter(b=>b.category===id);
+      catGrid.innerHTML=""; 
+      renderBreedCards(items, catGrid);
+      show("category");
+    }
+
+    // Breed cards
+    function renderBreedCards(list, target, compact=false){
+      if (!target) return;
+      target.innerHTML="";
+      
+      // Use DocumentFragment for better performance
+      const fragment = document.createDocumentFragment();
+      
+      list.forEach(b=>{
+        const el = card({
+          title:b.name,
+          subtitle:b.short,
+          chip:b.suitable,
+          image:b.image,
+          onClick:()=>openBreed(b)
+        });
+        if(compact){
+          const ph = el.querySelector(".ph");
+          if (ph) ph.style.height="140px";
+        }
+        fragment.appendChild(el);
+      });
+      
+      target.appendChild(fragment);
+    }
+
+    // Detail
+    function openBreed(b){
+      detailTitle.textContent = b.name;
+      detailName.textContent = b.name;
+      detailOrigin.textContent = b.origin;
+      detailSuitable.textContent = b.suitable;
+      detailChar.textContent = b.character;
+      detailCare.textContent = b.care;
+      detailSuitDet.textContent = b.suitableDetail;
+      
+      // Update detail image
+      if (detailImage) {
+        detailImage.innerHTML = "";
+        if (b.image) {
+          const img = document.createElement("img");
+          img.src = b.image;
+          img.alt = b.name;
+          img.style.width = "100%";
+          img.style.height = "100%";
+          img.style.objectFit = "contain";
+          img.style.borderRadius = "14px";
+          img.style.maxWidth = "100%";
+          img.style.maxHeight = "100%";
+          // Обработка ошибки загрузки изображения
+          img.onerror = function() {
+            detailImage.textContent = "Фото";
+          };
+          detailImage.appendChild(img);
+        } else {
+          detailImage.textContent = "Фото";
+        }
+      }
+      
+      detailBreeders.innerHTML = b.breeders.map(x=>(
+        `<div class="breeder">
+          <span>${x.name}</span>
+          <a class="link" target="_blank" href="https://instagram.com/${x.ig.replace('@','')}" rel="noopener noreferrer">${x.ig}</a>
+        </div>`
+      )).join("");
+      show("detail");
+    }
+
+    // Quiz
+    function renderQuiz(){
+      if (!quizWrap) return;
+      quizWrap.innerHTML="";
+      quizAnswers={};
+      
+      appData.questions.forEach(q=>{
+        const container=document.createElement("div"); 
+        container.className="q";
+        
+        const h=document.createElement("div"); 
+        h.textContent=q.q; 
+        container.appendChild(h);
+        
+        const opts=document.createElement("div"); 
+        opts.className="opts";
+        
+        q.opts.forEach(o=>{
+          const lbl=document.createElement("label"); 
+          lbl.className="opt"; 
+          lbl.textContent=o.t;
+          lbl.setAttribute('role', 'button');
+          lbl.setAttribute('tabindex', '0');
+          
+          lbl.addEventListener("click",()=>{
+            quizAnswers[q.id]=o.v; 
+            [...opts.children].forEach(x=>x.classList.remove('active')); 
+            lbl.classList.add('active');
+          }, {passive: true});
+          
+          lbl.addEventListener("keypress", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              lbl.click();
+            }
+          }, {passive: true});
+          
+          opts.appendChild(lbl);
+        });
+        
+        container.appendChild(opts);
+        quizWrap.appendChild(container);
+      });
+    }
+
+    function scoreMatch(breed){
+      const u=quizAnswers; 
+      let score=0, max=0;
+      const weight = 1;
+      Object.keys(breed.traits).forEach(k=>{
+        if(!u[k]) return;
+        max+=3*weight;
+        if(u[k]===breed.traits[k]) score+=3*weight;
+        else if(compatible(u[k],breed.traits[k])) score+=2*weight;
+        else if(acceptable(u[k],breed.traits[k])) score+=1*weight;
+      });
+      return max? Math.round(score/max*100):0;
+    }
+    
+    function compatible(u,b){
+      const m={low:['medium'],medium:['low','high'],high:['medium']};
+      return (m[u]||[]).includes(b);
+    }
+    
+    function acceptable(){return false}
+
+    function resultsFromQuiz(){
+      // Очищаем результаты перед показом новых
+      resultsGrid.innerHTML = "";
+      
+      console.log('Ответы квиза:', quizAnswers);
+      
+      const rated = allBreeds()
+        .map(b=>({breed:b, pct:scoreMatch(b)}))
+        .filter(x=>x.pct>0)
+        .sort((a,b)=>b.pct-a.pct)
+        .slice(0,3);
+        
+      console.log('Результаты квиза:', rated);
+        
+      if (rated.length > 0) {
+        rated.forEach(x => {
+          const card = document.createElement("article");
+          card.className = "card";
+          
+          const ph = document.createElement("div");
+          ph.className = "ph";
+          
+          if (x.breed.image) {
+            const img = document.createElement("img");
+            img.src = x.breed.image;
+            img.alt = x.breed.name;
+            img.style.cssText = "width:100%;height:100%;object-fit:contain;border-radius:12px";
+            ph.appendChild(img);
+          } else {
+            ph.textContent = "Фото";
+          }
+          
+          const h3 = document.createElement("h3");
+          h3.textContent = x.breed.name;
+          
+          const pct = document.createElement("div");
+          pct.className = "muted";
+          pct.textContent = `${x.pct}% совпадение`;
+          
+          const suitable = document.createElement("div");
+          suitable.className = "muted";
+          suitable.style.marginTop = "6px";
+          suitable.textContent = x.breed.suitable;
+          
+          const button = document.createElement("button");
+          button.className = "btn btn--primary";
+          button.style.marginTop = "10px";
+          button.textContent = "Подробнее";
+          button.onclick = () => openBreedFromResults(x.breed.id);
+          
+          card.appendChild(ph);
+          card.appendChild(h3);
+          card.appendChild(pct);
+          card.appendChild(suitable);
+          card.appendChild(button);
+          
+          resultsGrid.appendChild(card);
+        });
+      } else {
+        resultsGrid.innerHTML = `<div class="muted">Нет совпадений — поменяйте ответы</div>`;
+      }
+    }
+    
+    window.openBreedFromResults = (id)=>openBreed(allBreeds().find(b=>b.id===id));
+
+    // Navigation with passive event listeners
+    byId("back-main").onclick=()=>show("main");
+    byId("back-category").onclick=()=>show("category");
+    byId("to-quiz-top").onclick=()=>{renderQuiz(); show("quiz")};
+    byId("back-main-from-quiz").onclick=()=>show("main");
+    byId("show-results").onclick=resultsFromQuiz;
+    byId("reset-quiz").onclick=()=>renderQuiz();
+
+    // Initialize with error handling
+    function init() {
+      try {
+        renderMainCategories();
+        // Скрываем секцию "Кошки из базы данных" по умолчанию
+        const catListElement = document.getElementById('cat-list');
+        const catSection = catListElement ? catListElement.closest('section') : null;
+        if (catSection) {
+          catSection.style.display = 'none';
+        }
+        console.log('Application initialized successfully');
+      } catch (error) {
+        console.error('Error initializing application:', error);
+      }
+    }
+
+    // Start the application when DOM is loaded
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+  
+  <!-- Подключение app.js для Supabase интеграции -->
+  <script src="app.js"></script>
 </body>
 </html>

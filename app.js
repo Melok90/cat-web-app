@@ -1,641 +1,590 @@
-// Данные приложения
-const appData = {
-  "breeds": {
-    "longhaired": [
-      {
-        "name": "Мейн-кун",
-        "origin": "Происходит из Северной Америки (штат Мэн). Одна из крупнейших пород домашних кошек.",
-        "character": "Дружелюбные, спокойные, уравновешенные. Часто называются 'собаками в кошачьем теле'. Очень привязаны к семье, но сохраняют независимость. Отличные компаньоны, умные и легко поддаются дрессировке.",
-        "care": "Регулярное вычесывание 1-2 раза в неделю. Купание раз в 3 недели. Стрижка когтей еженедельно. Любят воду. Нуждаются в просторе и активных играх.",
-        "suitable": "Идеально для семей с детьми, владельцев собак, людей ведущих активный образ жизни. Хорошо подходят для больших квартир и частных домов.",
-        "nurseries": [
-          {
-            "name": "Илим Прайд",
-            "location": "Иркутская область",
-            "contact": "+79642607629",
-            "website": "https://илимпрайд.рф"
-          },
-          {
-            "name": "Fridmancats",
-            "location": "Москва",
-            "contact": "info@fridmancats.ru",
-            "website": "https://fridmancats.ru"
-          },
-          {
-            "name": "Raksi Line",
-            "location": "Санкт-Петербург",
-            "contact": "raksi@homeinraksi.ru",
-            "website": "https://homeinraksi.ru"
-          },
-          {
-            "name": "Мейн-Куны Москвы",
-            "location": "Москва",
-            "website": "https://mainecoons.moscow"
-          }
-        ],
-        "instagram": [
-          "@ofgoldenhappiness_mainecoon",
-          "@sphynx.coon.lux",
-          "@fluffytailscattery",
-          "@creato_in_felicita"
-        ]
-      },
-      {
-        "name": "Сибирская кошка",
-        "origin": "Исконно русская порода из Сибири. Сформировалась естественным путем в суровом климате.",
-        "character": "Спокойные, независимые, преданные. Отлично ладят с детьми и другими животными. Обладают чувством собственного достоинства, тактичны. Хорошие охотники.",
-        "care": "Густая шерсть требует регулярного вычесывания. К зиме 'обрастают' плотной шубой. Не боятся воды. Любят прогулки на свежем воздухе.",
-        "suitable": "Для семей с детьми, владельцев частных домов, людей ценящих спокойных питомцев. Подходят людям с аллергией (гипоаллергенны).",
-        "nurseries": [
-          {
-            "name": "VIVA SIBERIA",
-            "location": "По России",
-            "website": "https://www.vivasib.ru"
-          },
-          {
-            "name": "Царь-Кошка",
-            "location": "Ростов-на-Дону, Санкт-Петербург",
-            "contact": "+7-928-615-58-70, +7-999-218-94-93",
-            "website": "https://tzar-koshka.ru"
-          },
-          {
-            "name": "С берегов Невы",
-            "location": "Санкт-Петербург",
-            "website": "https://sberegovnevy.ru"
-          },
-          {
-            "name": "Сибирское Чудо",
-            "location": "Санкт-Петербург",
-            "website": "https://www.sib-chudo.ru"
-          }
-        ],
-        "instagram": [
-          "@tigruscat"
-        ]
-      }
-    ],
-    "shorthaired": [
-      {
-        "name": "Британская короткошерстная",
-        "origin": "Выведена в Великобритании в 19 веке. Известна своей плюшевой шерстью и спокойным характером.",
-        "character": "Независимые, спокойные, дипломатичные. Не любят излишнего внимания. Терпеливы с детьми. Предпочитают личное пространство. 'Кошки, которые гуляют сами по себе'.",
-        "care": "Вычесывание 1 раз в неделю. Линяют 2 раза в год. Склонны к набору лишнего веса. Нуждаются в качественном питании.",
-        "suitable": "Для занятых людей, пожилых, семей с воспитанными детьми. Идеальны для квартирного содержания. Подходят тем, кто ценит спокойствие.",
-        "nurseries": [
-          {
-            "name": "Diamond Breese",
-            "location": "Воронеж",
-            "contact": "Лариса Дубровина",
-            "website": "https://diamond-breese.ru"
-          },
-          {
-            "name": "Wonder-Plush",
-            "location": "Москва",
-            "contact": "Анна Кокарева",
-            "website": "https://www.superkot.ru"
-          },
-          {
-            "name": "Ellina",
-            "location": "Ярославль",
-            "contact": "Елена Репина",
-            "website": "https://ellinascats.ru"
-          },
-          {
-            "name": "Bri Tany*Ru",
-            "location": "Россия",
-            "website": "http://bri-tany.ru"
-          }
-        ],
-        "instagram": [
-          "@arletta_british",
-          "@gala_cat_ru"
-        ]
-      },
-      {
-        "name": "Русская голубая",
-        "origin": "Древняя русская порода, известная со времен Петра I. Ценилась моряками за охотничьи качества.",
-        "character": "Спокойные, чувствительные, умные. Любят рутину, осторожны с незнакомцами. Отличные охотники. Привязываются к семье, но не навязчивы.",
-        "care": "Короткая шерсть требует минимального ухода - вычесывание раз в неделю. Стрижка когтей ежемесячно. Любят интеллектуальные игры.",
-        "suitable": "Для спокойных семей, пожилых людей, тех кто ценит тактичных питомцев. Хорошо подходят для квартир. Не подходят для частых переездов.",
-        "nurseries": [
-          {
-            "name": "Актуальный питомник не найден",
-            "location": "-",
-            "contact": "-",
-            "website": "-"
-          }
-        ],
-        "instagram": []
-      }
-    ],
-    "hairless": [
-      {
-        "name": "Сфинкс (Канадский)",
-        "origin": "Появились в результате естественной мутации в 1966 году в Канаде. Первого котенка назвали Черносливом.",
-        "character": "Очень ласковые, общительные, привязанные к человеку. Любят быть в центре внимания. Умные, легко поддаются дрессировке. Энергичны и игривы.",
-        "care": "Особый уход за кожей - регулярное мытье, защита от солнца и холода. Нуждаются в одежде в холодное время. Повышенный аппетит из-за теплообмена.",
-        "suitable": "Для активных людей, семей с детьми, тех кто готов уделять много внимания. НЕ подходят людям с аллергией (не гипоаллергенны). Идеальны для тех, кто любит тактильный контакт.",
-        "nurseries": [
-          {
-            "name": "Baby Anabel Sphinx",
-            "location": "По России",
-            "contact": "Мария (зоопсихолог)",
-            "instagram": "@baby_anabel__sphinx"
-          },
-          {
-            "name": "Canada Village",
-            "location": "Россия",
-            "instagram": "@canadavillage_cattery"
-          }
-        ],
-        "instagram": [
-          "@baby_anabel__sphinx",
-          "@canadavillage_cattery", 
-          "@me_shanti_sfinx"
-        ]
-      }
-    ],
-    "exotic": [
-      {
-        "name": "Бенгальская",
-        "origin": "Межродовой гибрид домашней кошки и леопардовой кошки. Выведена в США для получения 'домашнего леопарда'.",
-        "character": "Активные, умные, общительные. Любят воду и высоту. Очень разговорчивые, издают различные звуки. Плохо переносят одиночество. Сохранили охотничьи инстинкты.",
-        "care": "Нуждаются в активных играх и физических нагрузках. Короткая шерсть с 'глиттером' легка в уходе. Любят водные процедуры.",
-        "suitable": "Для активных людей и семей, готовых уделять много времени. Подходят владельцам собак. НЕ подходят для спокойного образа жизни. Хорошо с детьми школьного возраста.",
-        "nurseries": [
-          {
-            "name": "Uralvento",
-            "location": "Москва",
-            "contact": "Елена",
-            "website": "https://bengalur.ru"
-          },
-          {
-            "name": "Manclan",
-            "location": "Санкт-Петербург",
-            "vk": "vk.com/manclancat"
-          },
-          {
-            "name": "Valentine's Dream", 
-            "location": "Санкт-Петербург",
-            "contact": "По справочнику Yell.ru"
-          }
-        ],
-        "instagram": [
-          "@golotnik_bengal"
-        ]
-      },
-      {
-        "name": "Абиссинская",
-        "origin": "Древняя порода из Эфиопии (бывшая Абиссиния). Одна из самых старых известных пород кошек.",
-        "character": "Очень активные, любознательные, умные. Не любят одиночество, всегда участвуют в делах хозяина. Любят высоту. Легко обучаются. Пугливы к громким звукам.",
-        "care": "Короткая тикированная шерсть не требует сложного ухода. Нуждаются в активных играх и внимании. Любят лазать по высоким местам.",
-        "suitable": "Для активных людей и семей, готовых постоянно взаимодействовать с питомцем. НЕ подходят очень занятым людям. Отлично с детьми.",
-        "nurseries": [
-          {
-            "name": "Novisenya",
-            "location": "Санкт-Петербург",
-            "website": "https://www.novisenya.ru"
-          },
-          {
-            "name": "My Golden Aby",
-            "location": "Россия",
-            "contact": "8(926)778-55-29",
-            "email": "mygoldenaby@gmail.com",
-            "website": "https://mygoldenaby.ru"
-          },
-          {
-            "name": "Оберег Велеса",
-            "location": "Москва", 
-            "website": "https://абиссинская-кошка.москвасайт.рф"
-          },
-          {
-            "name": "ADAMAS*RU",
-            "location": "Московская область",
-            "contact": "+7-985-437-79-64",
-            "email": "adamas-aby@yandex.ru",
-            "website": "https://www.abyssinians.ru"
-          }
-        ],
-        "instagram": []
-      },
-      {
-        "name": "Тойгер",
-        "origin": "Молодая порода, выведенная в США в конце 80-х для создания 'игрушечного тигра'. НЕ имеет родства с настоящими тиграми.",
-        "character": "Спокойные, дружелюбные, неагрессивные. Общительные, но не навязчивые. Очень любопытные. Легко адаптируются. Одинаково относятся ко всем членам семьи.",
-        "care": "Короткая шерсть не требует сложного ухода. Нужно следить за безопасностью из-за чрезмерного любопытства. Хорошо переносят поездки.",
-        "suitable": "Для семей с детьми, пожилых людей, начинающих владельцев. Подходят для квартир. Идеальны как компаньоны. Хорошо с другими животными.",
-        "nurseries": [
-          {
-            "name": "Актуальный питомник не найден",
-            "location": "-",
-            "contact": "-", 
-            "website": "-"
-          }
-        ],
-        "instagram": []
-      }
-    ]
-  },
-  "categories": [
-    {
-      "id": "longhaired",
-      "name": "Длинношерстные",
-      "description": "Породы с длинной, густой шерстью, требующие особого ухода",
-      "icon": "🦁"
-    },
-    {
-      "id": "shorthaired", 
-      "name": "Короткошерстные",
-      "description": "Породы с короткой шерстью, легкие в уходе",
-      "icon": "🐱"
-    },
-    {
-      "id": "hairless",
-      "name": "Бесшерстные", 
-      "description": "Уникальные породы без шерсти или с минимальным покровом",
-      "icon": "🐾"
-    },
-    {
-      "id": "exotic",
-      "name": "Экзотические и редкие",
-      "description": "Необычные и редкие породы с особыми характеристиками",
-      "icon": "🐅"
-    }
-  ]
-};
+// Supabase integration for cat photos and data
+// Подключение к Supabase через CDN
+const { createClient } = supabase;
 
-// Состояние приложения
-let currentState = {
-  view: 'categories', // categories, breeds, breedDetails, searchResults
-  currentCategory: null,
-  currentBreed: null,
-  searchQuery: '',
-  selectedFilter: ''
-};
+// Инициализация Supabase клиента
+const supabaseUrl = 'https://zrntpatdzumhybclhrhp.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpybnRwYXRkenVtaHliY2xocmhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzMTcyNjQsImV4cCI6MjA3NDg5MzI2NH0.rjsuoG_f1nuLAD8ahZF7pwvkYfMnTxxXybS4GYwoTqw';
 
-// DOM элементы
-const elements = {
-  searchInput: document.getElementById('searchInput'),
-  suitabilityFilter: document.getElementById('suitabilityFilter'),
-  categoriesView: document.getElementById('categoriesView'),
-  breedsView: document.getElementById('breedsView'),
-  breedDetailsView: document.getElementById('breedDetailsView'),
-  searchResultsView: document.getElementById('searchResultsView'),
-  noResultsView: document.getElementById('noResultsView'),
-  categoriesGrid: document.getElementById('categoriesGrid'),
-  breedsGrid: document.getElementById('breedsGrid'),
-  breedDetails: document.getElementById('breedDetails'),
-  searchResults: document.getElementById('searchResults'),
-  categoryTitle: document.getElementById('categoryTitle'),
-  searchTitle: document.getElementById('searchTitle'),
-  backToCategories: document.getElementById('backToCategories'),
-  backToBreeds: document.getElementById('backToBreeds'),
-  backToCategoriesFromDetails: document.getElementById('backToCategoriesFromDetails'),
-  clearSearch: document.getElementById('clearSearch')
-};
+const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
-// Инициализация приложения
-function init() {
-  renderCategories();
-  setupEventListeners();
-  showView('categories');
-}
-
-// Настройка слушателей событий
-function setupEventListeners() {
-  // Поиск
-  elements.searchInput.addEventListener('input', handleSearch);
-  
-  // Фильтр
-  elements.suitabilityFilter.addEventListener('change', handleFilter);
-  
-  // Навигация
-  elements.backToCategories.addEventListener('click', () => showCategories());
-  elements.backToBreeds.addEventListener('click', () => showBreeds(currentState.currentCategory));
-  elements.backToCategoriesFromDetails.addEventListener('click', () => showCategories());
-  elements.clearSearch.addEventListener('click', clearSearch);
-}
-
-// Отображение представлений
-function showView(viewName) {
-  // Скрыть все представления
-  Object.values(elements).forEach(el => {
-    if (el && el.classList && el.classList.contains('hidden')) {
-      // Элемент уже скрыт
-    } else if (el && el.id && el.id.includes('View')) {
-      el.classList.add('hidden');
-    }
-  });
-  
-  // Показать нужное представление
-  const viewElement = elements[viewName + 'View'];
-  if (viewElement) {
-    viewElement.classList.remove('hidden');
-  }
-  
-  currentState.view = viewName;
-}
-
-// Отрисовка категорий
-function renderCategories() {
-  elements.categoriesGrid.innerHTML = '';
-  
-  appData.categories.forEach(category => {
-    const categoryCard = createCategoryCard(category);
-    elements.categoriesGrid.appendChild(categoryCard);
-  });
-}
-
-// Создание карточки категории
-function createCategoryCard(category) {
-  const card = document.createElement('div');
-  card.className = 'category-card';
-  card.onclick = () => showBreeds(category.id);
-  
-  card.innerHTML = `
-    <span class="category-card__icon">${category.icon}</span>
-    <h3 class="category-card__name">${category.name}</h3>
-    <p class="category-card__description">${category.description}</p>
-  `;
-  
-  return card;
-}
-
-// Показать категории
-function showCategories() {
-  currentState.currentCategory = null;
-  currentState.currentBreed = null;
-  clearSearchAndFilters();
-  showView('categories');
-}
-
-// Показать породы в категории
-function showBreeds(categoryId) {
-  currentState.currentCategory = categoryId;
-  currentState.currentBreed = null;
-  
-  const category = appData.categories.find(cat => cat.id === categoryId);
-  const breeds = appData.breeds[categoryId] || [];
-  
-  elements.categoryTitle.textContent = category.name;
-  renderBreedsList(breeds, elements.breedsGrid);
-  showView('breeds');
-}
-
-// Показать детали породы
-function showBreedDetails(breed, categoryId) {
-  currentState.currentBreed = breed;
-  currentState.currentCategory = categoryId;
-  
-  renderBreedDetails(breed);
-  showView('breedDetails');
-}
-
-// Отрисовка списка пород
-function renderBreedsList(breeds, container) {
-  container.innerHTML = '';
-  
-  if (breeds.length === 0) {
-    showView('noResults');
-    return;
-  }
-  
-  breeds.forEach(breed => {
-    const breedCard = createBreedCard(breed);
-    container.appendChild(breedCard);
-  });
-}
-
-// Создание карточки породы
-function createBreedCard(breed) {
-  const card = document.createElement('div');
-  card.className = 'breed-card';
-  
-  // Найти категорию для этой породы
-  let categoryId = null;
-  for (const [catId, catBreeds] of Object.entries(appData.breeds)) {
-    if (catBreeds.some(b => b.name === breed.name)) {
-      categoryId = catId;
-      break;
-    }
-  }
-  
-  card.onclick = () => showBreedDetails(breed, categoryId);
-  
-  card.innerHTML = `
-    <div class="breed-card__header">
-      <h3 class="breed-card__name">${breed.name}</h3>
-    </div>
-    <div class="breed-card__body">
-      <p class="breed-card__origin">${breed.origin}</p>
-      <p class="breed-card__character">${truncateText(breed.character, 120)}</p>
-      <div class="breed-card__suitable">
-        <strong>Подходит:</strong> ${truncateText(breed.suitable, 80)}
-      </div>
-    </div>
-  `;
-  
-  return card;
-}
-
-// Отрисовка деталей породы
-function renderBreedDetails(breed) {
-  elements.breedDetails.innerHTML = `
-    <div class="breed-header">
-      <h1 class="breed-name">${breed.name}</h1>
-      <p class="breed-origin">${breed.origin}</p>
-    </div>
+// Функция для загрузки кошек из базы данных
+async function loadCatsFromDatabase() {
+  try {
+    console.log('Загружаем кошек из Supabase...');
     
-    <div class="breed-info-grid">
-      <div class="info-card">
-        <h3 class="info-card__title">
-          <span>🐱</span> Характер
-        </h3>
-        <div class="info-card__content">
-          <p>${breed.character}</p>
-        </div>
-      </div>
-      
-      <div class="info-card">
-        <h3 class="info-card__title">
-          <span>✂️</span> Особенности ухода
-        </h3>
-        <div class="info-card__content">
-          <p>${breed.care}</p>
-        </div>
-      </div>
-      
-      <div class="info-card">
-        <h3 class="info-card__title">
-          <span>👥</span> Кому подходит
-        </h3>
-        <div class="info-card__content">
-          <p>${breed.suitable}</p>
-        </div>
-      </div>
-      
-      <div class="info-card">
-        <h3 class="info-card__title">
-          <span>🏠</span> Питомники
-        </h3>
-        <div class="info-card__content">
-          ${renderNurseries(breed.nurseries)}
-        </div>
-      </div>
-      
-      ${breed.instagram && breed.instagram.length > 0 ? `
-      <div class="info-card">
-        <h3 class="info-card__title">
-          <span>📱</span> Instagram питомников
-        </h3>
-        <div class="info-card__content">
-          ${renderInstagram(breed.instagram)}
-        </div>
-      </div>
-      ` : ''}
-    </div>
-  `;
-}
-
-// Отрисовка питомников
-function renderNurseries(nurseries) {
-  if (!nurseries || nurseries.length === 0) {
-    return '<p>Информация о питомниках не найдена</p>';
-  }
-  
-  return `
-    <ul class="nurseries-list">
-      ${nurseries.map(nursery => `
-        <li class="nursery-item">
-          <div class="nursery-name">${nursery.name}</div>
-          <div class="nursery-location">📍 ${nursery.location}</div>
-          <div class="nursery-contact">
-            ${nursery.contact ? `📞 ${nursery.contact}` : ''}
-            ${nursery.website && nursery.website !== '-' ? `<a href="${nursery.website}" target="_blank">🌐 Сайт</a>` : ''}
-            ${nursery.email ? `<a href="mailto:${nursery.email}">📧 Email</a>` : ''}
-            ${nursery.vk ? `<a href="https://${nursery.vk}" target="_blank">📘 VK</a>` : ''}
-            ${nursery.instagram ? `<a href="https://instagram.com/${nursery.instagram}" target="_blank">📱 Instagram</a>` : ''}
-          </div>
-        </li>
-      `).join('')}
-    </ul>
-  `;
-}
-
-// Отрисовка Instagram аккаунтов
-function renderInstagram(instagramAccounts) {
-  if (!instagramAccounts || instagramAccounts.length === 0) {
-    return '<p>Instagram аккаунты не найдены</p>';
-  }
-  
-  return `
-    <div class="instagram-list">
-      ${instagramAccounts.map(account => `
-        <a href="https://instagram.com/${account.replace('@', '')}" target="_blank" class="instagram-link">
-          ${account}
-        </a>
-      `).join('')}
-    </div>
-  `;
-}
-
-// Поиск
-function handleSearch(event) {
-  const query = event.target.value.toLowerCase().trim();
-  currentState.searchQuery = query;
-  
-  if (query === '') {
-    if (currentState.selectedFilter === '') {
-      showCategories();
-    } else {
-      performFilter();
+    const { data: cats, error } = await supabaseClient
+      .from('cats')
+      .select('name, breed, description, image_url');
+    
+    if (error) {
+      console.error('Ошибка при загрузке кошек:', error);
+      showConnectionError(error);
+      return;
     }
+    
+    console.log('Данные из Supabase:', cats);
+    
+    if (cats && cats.length > 0) {
+      console.log(`Загружено ${cats.length} кошек из базы данных`);
+      
+      // Находим главное изображение (hero)
+      const heroCat = cats.find(cat => cat.breed === 'hero');
+      if (heroCat) {
+        displayHeroImage(heroCat);
+      }
+      
+      // Загружаем изображения для категорий
+      loadCategoryImages(cats);
+      
+      // Отображаем остальные кошки как карточки
+      const otherCats = cats.filter(cat => cat.breed !== 'hero' && !isCategoryBreed(cat.breed));
+      if (otherCats.length > 0) {
+        displayCatsFromDatabase(otherCats);
+      } else {
+        showNoCatsMessage();
+      }
+    } else {
+      console.log('Кошки не найдены в базе данных');
+      showNoCatsMessage();
+    }
+  } catch (error) {
+    console.error('Ошибка при подключении к Supabase:', error);
+    showConnectionError(error);
+  }
+}
+
+// Функция для отображения главного изображения
+function displayHeroImage(heroCat) {
+  const heroImageElement = document.getElementById('hero-image');
+  
+  if (!heroImageElement) {
+    console.error('Элемент с id="hero-image" не найден');
     return;
   }
   
-  performSearch();
-}
-
-function performSearch() {
-  const query = currentState.searchQuery.toLowerCase();
-  const results = [];
+  console.log('Отображаем главное изображение:', heroCat);
   
-  // Поиск по всем породам
-  Object.values(appData.breeds).forEach(categoryBreeds => {
-    categoryBreeds.forEach(breed => {
-      if (breed.name.toLowerCase().includes(query)) {
-        results.push(breed);
-      }
-    });
-  });
-  
-  // Применение фильтра к результатам поиска
-  let filteredResults = results;
-  if (currentState.selectedFilter) {
-    filteredResults = filterBreedsBySuitability(results, currentState.selectedFilter);
-  }
-  
-  elements.searchTitle.textContent = `Результаты поиска: "${currentState.searchQuery}"`;
-  renderBreedsList(filteredResults, elements.searchResults);
-  showView('searchResults');
-}
-
-// Фильтрация
-function handleFilter(event) {
-  const filter = event.target.value;
-  currentState.selectedFilter = filter;
-  
-  if (currentState.searchQuery) {
-    performSearch();
-  } else if (filter === '') {
-    showCategories();
+  if (heroCat && heroCat.image_url) {
+    heroImageElement.src = heroCat.image_url;
+    heroImageElement.alt = heroCat.name || 'Разнообразные породы кошек';
+    
+    // Обработка ошибки загрузки изображения
+    heroImageElement.onerror = function() {
+      console.warn('Не удалось загрузить главное изображение:', heroCat.image_url);
+      // Пробуем загрузить изображение по умолчанию
+      this.src = 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hero.png';
+    };
+    
+    // Обработка успешной загрузки
+    heroImageElement.onload = function() {
+      console.log('Главное изображение успешно загружено:', heroCat.name);
+      this.style.display = 'block';
+    };
+    
+    console.log('Устанавливаем главное изображение:', heroCat.image_url);
   } else {
-    performFilter();
+    console.warn('У главной кошки нет изображения, используем изображение по умолчанию');
+    // Устанавливаем изображение по умолчанию
+    heroImageElement.src = 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hero.png';
+    heroImageElement.alt = 'Разнообразные породы кошек';
+    heroImageElement.style.display = 'block';
   }
 }
 
-function performFilter() {
-  const allBreeds = [];
+// Функция для проверки, является ли порода категорией
+function isCategoryBreed(breed) {
+  const categoryBreeds = ['longhair', 'shorthair', 'hairless', 'exotic'];
+  return categoryBreeds.includes(breed);
+}
+
+// Функция для загрузки изображений категорий
+function loadCategoryImages(cats) {
+  console.log('Загружаем изображения категорий из данных:', cats);
   
-  // Собрать все породы
-  Object.values(appData.breeds).forEach(categoryBreeds => {
-    allBreeds.push(...categoryBreeds);
+  const categoryImages = {};
+  
+  // Сопоставление категорий с породами из основного кода
+  const categoryBreedMapping = {
+    longhair: ['maine_coon', 'siberian', 'persian'],
+    shorthair: ['british', 'russian_blue', 'abyssinian'],
+    hairless: ['sphynx'],
+    exotic: ['bengal', 'toyger']
+  };
+  
+  // Собираем изображения для каждой категории
+  Object.keys(categoryBreedMapping).forEach(category => {
+    const breeds = categoryBreedMapping[category];
+    
+    // Ищем первую породу из категории в данных Supabase
+    for (const breed of breeds) {
+      const cat = cats.find(c => c.breed === breed);
+      if (cat && cat.image_url) {
+        categoryImages[category] = cat.image_url;
+        console.log(`Найдено изображение для категории ${category} (порода ${breed}): ${cat.image_url}`);
+        break; // Берем первое найденное изображение
+      }
+    }
+    
+    // Если для категории не найдено изображение, используем fallback
+    if (!categoryImages[category]) {
+      // Специальные fallback изображения для каждой категории
+      const fallbackImages = {
+        longhair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png',
+        shorthair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/short-haired.png',
+        hairless: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.jpg',
+        exotic: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/exotic.png'
+      };
+      
+      categoryImages[category] = fallbackImages[category] || 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hero.png';
+      console.log(`Используем fallback изображение для категории ${category}: ${categoryImages[category]}`);
+    }
   });
   
-  const filteredBreeds = filterBreedsBySuitability(allBreeds, currentState.selectedFilter);
+  console.log('Итоговые изображения категорий:', categoryImages);
   
-  elements.searchTitle.textContent = `Породы, подходящие: ${elements.suitabilityFilter.options[elements.suitabilityFilter.selectedIndex].text.toLowerCase()}`;
-  renderBreedsList(filteredBreeds, elements.searchResults);
-  showView('searchResults');
+  // Обновляем глобальную переменную для использования в основном коде
+  window.categoryImages = categoryImages;
+  
+  // Обновляем карточки категорий, если они уже отображены
+  updateCategoryCards();
+  
+  // Также вызываем функцию обновления из основного кода
+  if (typeof updateCategoryCardsWithImages === 'function') {
+    console.log('Вызываем updateCategoryCardsWithImages из основного кода');
+    updateCategoryCardsWithImages();
+  } else {
+    console.log('Функция updateCategoryCardsWithImages не найдена');
+  }
 }
 
-function filterBreedsBySuitability(breeds, filter) {
-  return breeds.filter(breed => 
-    breed.suitable.toLowerCase().includes(filter.toLowerCase())
-  );
+// Функция для обновления карточек категорий
+function updateCategoryCards() {
+  if (!window.categoryImages) return;
+  
+  const catsCatsElement = document.getElementById('cats-cats');
+  if (!catsCatsElement) return;
+  
+  const categoryCards = catsCatsElement.querySelectorAll('.card');
+  categoryCards.forEach(card => {
+    const imageContainer = card.querySelector('.ph');
+    if (imageContainer) {
+      // Получаем ID категории из обработчика клика
+      const onClickAttr = card.getAttribute('onclick') || '';
+      let categoryId = '';
+      
+      if (onClickAttr.includes('longhair')) categoryId = 'longhair';
+      else if (onClickAttr.includes('shorthair')) categoryId = 'shorthair';
+      else if (onClickAttr.includes('hairless')) categoryId = 'hairless';
+      else if (onClickAttr.includes('exotic')) categoryId = 'exotic';
+      
+      if (categoryId && window.categoryImages[categoryId]) {
+        // Очищаем контейнер
+        imageContainer.innerHTML = '';
+        
+        // Создаем изображение
+        const img = document.createElement('img');
+        img.src = window.categoryImages[categoryId];
+        img.alt = card.querySelector('h3').textContent;
+        img.style.cssText = `
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 12px;
+        `;
+        
+        // Обработка ошибки загрузки изображения
+        img.onerror = function() {
+          imageContainer.textContent = "Фото";
+          imageContainer.setAttribute('aria-hidden', 'true');
+        };
+        
+        imageContainer.appendChild(img);
+        imageContainer.removeAttribute('aria-hidden');
+      }
+    }
+  });
 }
 
-// Очистить поиск и фильтры
-function clearSearch() {
-  currentState.searchQuery = '';
-  currentState.selectedFilter = '';
-  elements.searchInput.value = '';
-  elements.suitabilityFilter.value = '';
-  showCategories();
+// Функция для отображения кошек из базы данных
+function displayCatsFromDatabase(cats) {
+  const catListElement = document.getElementById('cat-list');
+  const catSection = catListElement ? catListElement.closest('section') : null;
+  
+  if (!catListElement) {
+    console.error('Элемент с id="cat-list" не найден');
+    return;
+  }
+  
+  // Показываем секцию, так как есть данные
+  if (catSection) {
+    catSection.style.display = 'flex';
+  }
+  
+  // Очищаем контейнер
+  catListElement.innerHTML = '';
+  
+  // Создаем карточки для каждой кошки
+  cats.forEach(cat => {
+    const catCard = createCatCard(cat);
+    catListElement.appendChild(catCard);
+  });
 }
 
-function clearSearchAndFilters() {
-  elements.searchInput.value = '';
-  elements.suitabilityFilter.value = '';
-  currentState.searchQuery = '';
-  currentState.selectedFilter = '';
+// Функция для скрытия секции, когда кошки не найдены
+function showNoCatsMessage() {
+  const catListElement = document.getElementById('cat-list');
+  const catSection = catListElement ? catListElement.closest('section') : null;
+  
+  if (!catListElement) {
+    console.error('Элемент с id="cat-list" не найден');
+    return;
+  }
+  
+  console.log('Скрываем секцию "Кошки из базы данных" - данных нет');
+  
+  // Скрываем всю секцию
+  if (catSection) {
+    catSection.style.display = 'none';
+  }
 }
 
-// Утилиты
-function truncateText(text, maxLength) {
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
+// Функция для создания карточки кошки
+function createCatCard(cat) {
+  const card = document.createElement('article');
+  card.className = 'card';
+  
+  // Изображение кошки
+  const imageContainer = document.createElement('div');
+  imageContainer.className = 'ph';
+  
+  const img = document.createElement('img');
+  img.src = cat.image_url || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%23f0f0f0"/><text x="100" y="100" text-anchor="middle" font-family="Arial" font-size="14" fill="%23999">Фото</text></svg>';
+  img.alt = cat.name;
+  img.style.cssText = `
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+  `;
+  
+  // Обработка ошибки загрузки изображения
+  img.onerror = function() {
+    this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%23f0f0f0"/><text x="100" y="100" text-anchor="middle" font-family="Arial" font-size="14" fill="%23999">Фото</text></svg>';
+  };
+  
+  imageContainer.appendChild(img);
+  
+  // Название кошки
+  const nameElement = document.createElement('h3');
+  nameElement.textContent = cat.name;
+  
+  // Описание кошки
+  const descriptionElement = document.createElement('div');
+  descriptionElement.className = 'muted';
+  descriptionElement.textContent = cat.description || 'Описание не указано';
+  
+  // Кнопка "Выбрать"
+  const selectButton = document.createElement('button');
+  selectButton.textContent = 'Выбрать';
+  selectButton.className = 'btn btn--primary';
+  selectButton.style.cssText = `
+    margin-top: 8px;
+  `;
+  
+  // Обработчик клика на кнопку "Выбрать"
+  selectButton.addEventListener('click', () => {
+    selectCat(cat);
+  });
+  
+  // Собираем карточку
+  card.appendChild(imageContainer);
+  card.appendChild(nameElement);
+  card.appendChild(descriptionElement);
+  card.appendChild(selectButton);
+  
+  return card;
+}
+
+// Функция для обработки выбора кошки
+function selectCat(cat) {
+  console.log('Выбрана кошка:', cat);
+  
+  // Здесь можно добавить логику для обработки выбора кошки
+  // Например, показать модальное окно, добавить в корзину и т.д.
+  
+  // Показываем уведомление
+  showNotification(`Вы выбрали: ${cat.name}`);
+}
+
+// Функция для показа уведомлений
+function showNotification(message) {
+  // Создаем элемент уведомления
+  const notification = document.createElement('div');
+  notification.textContent = message;
+  notification.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--primary);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 8px;
+    z-index: 1000;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Анимация появления
+  setTimeout(() => {
+    notification.style.transform = 'translateX(0)';
+  }, 100);
+  
+  // Автоматическое скрытие через 3 секунды
+  setTimeout(() => {
+    notification.style.transform = 'translateX(100%)';
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
+      }
+    }, 300);
+  }, 3000);
+}
+
+// Функция для тестирования подключения к Supabase
+async function testSupabaseConnection() {
+  try {
+    console.log('Тестируем подключение к Supabase...');
+    
+    // Проверяем, что Supabase клиент инициализирован
+    if (!supabaseClient) {
+      throw new Error('Supabase клиент не инициализирован');
+    }
+    
+    // Пробуем выполнить простой запрос
+    const { data, error } = await supabaseClient
+      .from('cats')
+      .select('*')
+      .limit(1);
+    
+    if (error) {
+      console.error('Ошибка подключения к Supabase:', error);
+      showConnectionError(error);
+      return false;
+    }
+    
+    console.log('✅ Подключение к Supabase успешно');
+    return true;
+  } catch (error) {
+    console.error('Ошибка при тестировании подключения:', error);
+    showConnectionError(error);
+    return false;
+  }
+}
+
+// Функция для скрытия секции при ошибке подключения
+function showConnectionError(error) {
+  const catListElement = document.getElementById('cat-list');
+  const catSection = catListElement ? catListElement.closest('section') : null;
+  
+  if (!catListElement) {
+    console.error('Элемент с id="cat-list" не найден');
+    return;
+  }
+  
+  console.log('Скрываем секцию "Кошки из базы данных" - ошибка подключения:', error);
+  
+  // Скрываем всю секцию при ошибке
+  if (catSection) {
+    catSection.style.display = 'none';
+  }
 }
 
 // Инициализация при загрузке страницы
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM загружен, инициализируем Supabase...');
+  
+  // Сначала тестируем подключение
+  testSupabaseConnection().then(isConnected => {
+    if (isConnected) {
+      // Если подключение успешно, загружаем кошек
+      loadCatsFromDatabase();
+    } else {
+      // Если подключение не удалось, устанавливаем главное изображение принудительно
+      console.log('Подключение к Supabase не удалось, устанавливаем главное изображение принудительно');
+      setTimeout(() => {
+        window.setHeroImage();
+      }, 1000);
+    }
+  });
+  
+  // Дополнительная проверка через 3 секунды
+  setTimeout(() => {
+    const heroImageElement = document.getElementById('hero-image');
+    if (heroImageElement && !heroImageElement.src) {
+      console.log('Главное изображение не загружено, устанавливаем принудительно');
+      window.setHeroImage();
+    }
+    
+    // Проверяем изображения категорий
+    if (!window.categoryImages) {
+      console.log('Изображения категорий не загружены, устанавливаем принудительно');
+      window.setCategoryImages();
+    }
+  }, 3000);
+});
+
+// Функция для принудительной установки главного изображения
+window.setHeroImage = function() {
+  console.log('Принудительно устанавливаем главное изображение...');
+  const heroImageElement = document.getElementById('hero-image');
+  
+  if (heroImageElement) {
+    heroImageElement.src = 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hero.png';
+    heroImageElement.alt = 'Разнообразные породы кошек';
+    heroImageElement.style.display = 'block';
+    
+    heroImageElement.onload = function() {
+      console.log('Главное изображение успешно загружено принудительно');
+    };
+    
+    heroImageElement.onerror = function() {
+      console.error('Ошибка загрузки главного изображения');
+    };
+  } else {
+    console.error('Элемент hero-image не найден');
+  }
+};
+
+// Функция для принудительной установки изображений категорий
+window.setCategoryImages = function() {
+  console.log('Принудительно устанавливаем изображения категорий...');
+  
+  // Сначала пытаемся загрузить данные из Supabase
+  loadCatsFromDatabase().then(() => {
+    console.log('Данные загружены, изображения категорий должны быть установлены');
+  }).catch(() => {
+    console.log('Ошибка загрузки данных, используем fallback изображения');
+    
+    const fallbackImages = {
+      longhair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png',
+      shorthair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/short-haired.png',
+      hairless: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.jpg',
+      exotic: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/exotic.png'
+    };
+    
+    // Устанавливаем глобальную переменную
+    window.categoryImages = fallbackImages;
+    
+    // Обновляем карточки
+    if (typeof updateCategoryCardsWithImages === 'function') {
+      updateCategoryCardsWithImages();
+    }
+    
+    console.log('Fallback изображения категорий установлены:', fallbackImages);
+  });
+};
+
+// Функция для тестирования загрузки изображений категорий
+window.testCategoryImages = function() {
+  console.log('Тестируем загрузку изображений категорий...');
+  console.log('window.categoryImages:', window.categoryImages);
+  
+  if (window.categoryImages) {
+    Object.keys(window.categoryImages).forEach(category => {
+      console.log(`${category}: ${window.categoryImages[category]}`);
+    });
+  }
+  
+  // Принудительно обновляем карточки
+  if (typeof updateCategoryCardsWithImages === 'function') {
+    updateCategoryCardsWithImages();
+  }
+};
+
+// Функция для принудительной установки изображения длинношерстных пород
+window.setLonghairImage = function() {
+  console.log('Принудительно устанавливаем изображение для длинношерстных пород...');
+  
+  // Устанавливаем изображение для длинношерстных пород
+  if (!window.categoryImages) {
+    window.categoryImages = {};
+  }
+  
+  window.categoryImages.longhair = 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png';
+  
+  // Обновляем карточки
+  if (typeof updateCategoryCardsWithImages === 'function') {
+    updateCategoryCardsWithImages();
+  }
+  
+  console.log('Изображение для длинношерстных пород установлено:', window.categoryImages.longhair);
+};
+
+// Функция для тестирования данных из Supabase
+window.testSupabaseData = async function() {
+  console.log('Тестируем данные из Supabase...');
+  
+  try {
+    const { data: cats, error } = await supabaseClient
+      .from('cats')
+      .select('name, breed, description, image_url');
+    
+    if (error) {
+      console.error('Ошибка при загрузке данных:', error);
+      return;
+    }
+    
+    console.log('Данные из Supabase:', cats);
+    
+    // Показываем все породы
+    cats.forEach(cat => {
+      console.log(`Порода: ${cat.breed}, Имя: ${cat.name}, Изображение: ${cat.image_url}`);
+    });
+    
+    // Показываем сопоставление категорий
+    const categoryBreedMapping = {
+      longhair: ['maine_coon', 'siberian', 'persian'],
+      shorthair: ['british', 'russian_blue', 'abyssinian'],
+      hairless: ['sphynx'],
+      exotic: ['bengal', 'toyger']
+    };
+    
+    Object.keys(categoryBreedMapping).forEach(category => {
+      const breeds = categoryBreedMapping[category];
+      console.log(`\nКатегория ${category}:`);
+      breeds.forEach(breed => {
+        const cat = cats.find(c => c.breed === breed);
+        if (cat) {
+          console.log(`  ✓ ${breed}: ${cat.name} - ${cat.image_url}`);
+        } else {
+          console.log(`  ✗ ${breed}: не найдено в базе данных`);
+        }
+      });
+    });
+    
+  } catch (error) {
+    console.error('Ошибка при тестировании:', error);
+  }
+};
+
+// Экспортируем функции для использования в других частях приложения
+window.SupabaseCats = {
+  loadCatsFromDatabase,
+  displayHeroImage,
+  loadCategoryImages,
+  updateCategoryCards,
+  selectCat,
+  showNotification,
+  testSupabaseConnection,
+  showNoCatsMessage,
+  testCategoryImages,
+  testSupabaseData,
+  setHeroImage,
+  setCategoryImages,
+  setLonghairImage
+};
