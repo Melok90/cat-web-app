@@ -16,7 +16,7 @@
   <link rel="preload" as="image" href="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hero.png">
   <link rel="preload" as="image" href="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png">
   <link rel="preload" as="image" href="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cuprum:wght@400;600;700&display=swap&subset=cyrillic" rel="stylesheet">
   
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -31,19 +31,19 @@
     html,body{height:100%}
     body{
       margin:0;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-family:Cuprum,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text); background:linear-gradient(180deg,#0f1113 0%,#111416 100%);
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
     a{color:inherit}
-    .container{max-width:1100px;margin:0 auto;padding:0 16px}
+    .container{max-width:900px;margin:0 auto;padding:0 16px}
     .page{display:none;min-height:100dvh}
     .page.active{display:flex;flex-direction:column}
     header.site{padding:32px 0 8px;text-align:center}
     .title{font-size:32px;font-weight:800;margin:0 0 6px}
     .subtitle{margin:0 0 18px;color:var(--muted)}
     .hero-image-container{display:flex;justify-content:center;margin:24px 0}
-    .hero-image{width:100%;max-width:400px;height:280px;object-fit:contain;border-radius:var(--radius-lg);box-shadow:0 8px 32px rgba(0,0,0,0.12);transition:transform 0.3s ease}
+    .hero-image{width:100%;max-width:400px;height:280px;object-fit:contain;border-radius:var(--radius-lg);box-shadow:0 8px 32px rgba(0,0,0,0.12);transition:transform 0.3s ease;background:transparent}
     .hero-image:hover{transform:translateY(-4px)}
     .search-row{display:flex;gap:var(--gap-3);align-items:center;flex-wrap:wrap;justify-content:center}
     .search{flex:1;min-width:200px;max-width:300px;display:flex;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
@@ -56,9 +56,9 @@
       gap:10px;padding:12px 16px;border-radius:12px;border:1px solid var(--border);background:var(--surface);
       color:var(--text);cursor:pointer;transition:.15s ease;white-space:nowrap;font-size:16px;min-height:44px;
     }
-    .btn--primary{background:var(--primary);border-color:transparent}
+    .btn--primary{background:linear-gradient(135deg, #2ea56a 0%, #8b5cf6 100%);border-color:transparent}
     .btn:hover{transform:translateY(-1px)}
-    .btn--primary:hover{background:var(--primary-700)}
+    .btn--primary:hover{background:linear-gradient(135deg, #1f8b55 0%, #7c3aed 100%);transform:translateY(-1px)}
     .btn:active{transform:translateY(0)}
     .grid{display:flex;flex-wrap:wrap;gap:var(--gap-6)}
     .card{flex:1 1 280px;max-width:calc(50% - var(--gap-6)/2);min-width:280px;width:100%;display:flex;flex-direction:column;gap:12px;
@@ -161,7 +161,7 @@
         <h1 class="title">Гид по породам кошек</h1>
         <p class="subtitle">Поможем найти идеальную породу для вашего дома</p>
         <div class="hero-image-container">
-          <img id="hero-image" alt="Разнообразные породы кошек" class="hero-image">
+          <img id="hero-image" alt="Разнообразные породы кошек" class="hero-image" src="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hero.png">
         </div>
         <div class="search-row">
           <div class="search"><input id="search" placeholder="Поиск по породам..." /></div>

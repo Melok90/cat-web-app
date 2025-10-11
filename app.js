@@ -63,6 +63,12 @@ function displayHeroImage(heroCat) {
     return;
   }
   
+  // Если изображение уже загружено, не перезаписываем его
+  if (heroImageElement.src && heroImageElement.src !== '') {
+    console.log('Главное изображение уже загружено, пропускаем обновление');
+    return;
+  }
+  
   console.log('Отображаем главное изображение:', heroCat);
   
   if (heroCat && heroCat.image_url) {
