@@ -63,12 +63,6 @@ function displayHeroImage(heroCat) {
     return;
   }
   
-  // Если изображение уже загружено, не перезаписываем его
-  if (heroImageElement.src && heroImageElement.src !== '') {
-    console.log('Главное изображение уже загружено, пропускаем обновление');
-    return;
-  }
-  
   console.log('Отображаем главное изображение:', heroCat);
   
   if (heroCat && heroCat.image_url) {
@@ -118,12 +112,25 @@ function loadCategoryImages(cats) {
     exotic: ['bengal', 'toyger']
   };
   
+  // Специальные изображения для конкретных пород
+  const breedSpecificImages = {
+    persian: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/pers_.png'
+  };
+  
   // Собираем изображения для каждой категории
   Object.keys(categoryBreedMapping).forEach(category => {
     const breeds = categoryBreedMapping[category];
     
     // Ищем первую породу из категории в данных Supabase
     for (const breed of breeds) {
+      // Сначала проверяем специальные изображения
+      if (breedSpecificImages[breed]) {
+        categoryImages[category] = breedSpecificImages[breed];
+        console.log(`Используем специальное изображение для категории ${category} (порода ${breed}): ${breedSpecificImages[breed]}`);
+        break;
+      }
+      
+      // Затем ищем в данных Supabase
       const cat = cats.find(c => c.breed === breed);
       if (cat && cat.image_url) {
         categoryImages[category] = cat.image_url;

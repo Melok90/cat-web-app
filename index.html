@@ -16,7 +16,7 @@
   <link rel="preload" as="image" href="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hero.png">
   <link rel="preload" as="image" href="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png">
   <link rel="preload" as="image" href="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.png">
-  <link href="https://fonts.googleapis.com/css2?family=Cuprum:wght@400;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap&subset=cyrillic" rel="stylesheet">
   
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -31,20 +31,20 @@
     html,body{height:100%}
     body{
       margin:0;
-      font-family:Cuprum,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      padding:0 8px;
+      font-family:Nunito,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text); background:linear-gradient(180deg,#0f1113 0%,#111416 100%);
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
     a{color:inherit}
-    .container{max-width:900px;margin:0 auto;padding:0 16px}
+    .container{max-width:900px;margin:0 auto;padding:0 20px}
     .page{display:none;min-height:100dvh}
     .page.active{display:flex;flex-direction:column}
     header.site{padding:32px 0 8px;text-align:center}
     .title{font-size:32px;font-weight:800;margin:0 0 6px}
     .subtitle{margin:0 0 18px;color:var(--muted)}
     .hero-image-container{display:flex;justify-content:center;margin:24px 0}
-    .hero-image{width:100%;max-width:400px;height:280px;object-fit:contain;border-radius:var(--radius-lg);box-shadow:0 8px 32px rgba(0,0,0,0.12);transition:transform 0.3s ease;background:transparent}
-    .hero-image:hover{transform:translateY(-4px)}
+    .hero-image{width:100%;max-width:400px;height:280px;object-fit:contain;border-radius:var(--radius-lg);background:transparent;pointer-events:none}
     .search-row{display:flex;gap:var(--gap-3);align-items:center;flex-wrap:wrap;justify-content:center}
     .search{flex:1;min-width:200px;max-width:300px;display:flex;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
     .search input{
@@ -68,8 +68,8 @@
     .ph--black{background:rgb(23,26,28) !important}
     .card:hover{transform:translateY(-2px)}
     .card:active{transform:translateY(0)}
-    .ph{height:200px;border-radius:12px;background:transparent;display:flex;align-items:center;justify-content:center;color:#a3aab3;overflow:hidden}
-    .ph img{width:100%;height:100%;object-fit:contain;border-radius:12px}
+    .ph{height:200px;border-radius:12px;background:transparent;display:flex;align-items:center;justify-content:center;color:#a3aab3;overflow:visible;padding:8px}
+    .ph img{width:100%;height:100%;object-fit:contain;border-radius:12px;padding:8px}
     .card h3{margin:0 0 6px;font-size:18px;font-weight:600}
     .muted{color:var(--muted);font-size:14px;line-height:1.4}
     .chip{align-self:flex-start;padding:6px 10px;border-radius:999px;border:1px solid #355; background:#1a2126; color:#86d3ff;font-size:12px}
@@ -98,7 +98,7 @@
     /* Mobile optimizations */
     @media (max-width:840px){
       .card{max-width:100%}
-      .ph{height:180px}
+      .ph{height:180px;padding:6px}
       .title{font-size:28px}
       .hero-image{max-width:350px;height:240px;object-fit:contain}
       .search-row{flex-direction:column;align-items:center}
@@ -113,15 +113,29 @@
       .opt{width:100%}
       .section-title{text-align:center}
       .grid{justify-content:center}
+      
+      /* Mobile compact category icons */
+      .category-icons {
+        gap: 8px;
+        padding: 0 8px;
+      }
+      
+      .category-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 44px;
+        min-height: 44px;
+      }
     }
     
     @media (max-width:480px){
-      .container{padding:0 12px}
+      body{padding:0 4px}
+      .container{padding:0 16px}
       header.site{padding:24px 0 8px}
       .title{font-size:24px}
       .hero-image{max-width:300px;height:200px;object-fit:contain}
       .card{padding:12px}
-      .ph{height:160px}
+      .ph{height:160px;padding:4px}
       .btn{padding:14px 16px;font-size:16px}
       .search input{padding:12px 16px 12px 48px;font-size:16px;min-height:44px}
       .topbar{gap:8px}
@@ -138,6 +152,101 @@
     @media (prefers-reduced-motion: reduce) {
       .card,.btn,.opt{transition:none}
       .card:hover,.btn:hover,.opt:hover{transform:none}
+    }
+    
+    /* Compact category icons for search mode */
+    .category-icons {
+      display: none;
+      flex-direction: row;
+      gap: 12px;
+      justify-content: center;
+      margin: 8px 0 16px 0;
+      padding: 0 16px;
+    }
+    
+    .category-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s ease-out;
+      overflow: hidden;
+    }
+    
+    .category-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      padding: 4px;
+    }
+    
+    .category-icon:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+    
+    .category-icon:active {
+      transform: scale(0.95);
+    }
+    
+    /* Search active state */
+    .search-active .category-icons {
+      display: flex;
+    }
+    
+    .search-active #cats-cats {
+      display: none;
+    }
+    
+    .search-active #search-results-section {
+      display: block;
+    }
+    
+    /* Center category title when in compact view and keep it visible */
+    .search-active .section-title {
+      text-align: center;
+      display: block !important;
+    }
+    
+    /* Search results section */
+    #search-results-section {
+      display: none;
+    }
+    
+    /* Search results title styling */
+    #search-results-title {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    
+    /* Very small screens */
+    @media (max-width: 320px) {
+      body {
+        padding: 0 2px;
+      }
+      
+      .container {
+        padding: 0 12px;
+      }
+      
+      .title {
+        font-size: 20px;
+      }
+      
+      .card {
+        padding: 8px;
+      }
+      
+      .ph {
+        height: 120px;
+      }
     }
     
     /* Dark mode support */
@@ -161,17 +270,41 @@
         <h1 class="title">Гид по породам кошек</h1>
         <p class="subtitle">Поможем найти идеальную породу для вашего дома</p>
         <div class="hero-image-container">
-          <img id="hero-image" alt="Разнообразные породы кошек" class="hero-image" src="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hero.png">
+          <img id="hero-image" src="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hero.png" alt="Разнообразные породы кошек" class="hero-image">
         </div>
         <div class="search-row">
           <div class="search"><input id="search" placeholder="Поиск по породам..." /></div>
         </div>
-        <button class="btn btn--primary" id="to-quiz-top" style="margin-top: 16px; width: 100%; max-width: 300px; margin-left: auto; margin-right: auto; display: block;">🔍 Подобрать породу</button>
+        <button class="btn btn--primary" id="to-quiz-top" style="margin-top: 16px; width: 100%; max-width: 300px; margin-left: auto; margin-right: auto; display: block;">Подобрать породу</button>
       </header>
 
       <section>
         <h2 class="section-title">Категории пород</h2>
+        
+        <!-- Compact category icons (shown during search) -->
+        <div class="category-icons">
+          <div class="category-icon" data-category="longhair">
+            <img src="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png" alt="Длинношерстные породы">
+          </div>
+          <div class="category-icon" data-category="shorthair">
+            <img src="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/short-haired.png" alt="Короткошерстные породы">
+          </div>
+          <div class="category-icon" data-category="hairless">
+            <img src="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.png" alt="Бесшерстные породы">
+          </div>
+          <div class="category-icon" data-category="exotic">
+            <img src="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/exotic.png" alt="Экзотические породы">
+          </div>
+        </div>
+        
+        <!-- Full category cards (shown by default) -->
         <div id="cats-cats" class="grid"></div>
+      </section>
+      
+      <!-- Search results section -->
+      <section id="search-results-section">
+        <h2 class="section-title" id="search-results-title">Результаты поиска</h2>
+        <div id="search-grid" class="grid"></div>
       </section>
       
       <section>
@@ -179,9 +312,6 @@
         <div id="cat-list" class="cat-list-container"></div>
       </section>
       
-      <section>
-        <div id="search-grid" class="grid"></div>
-      </section>
       
       <footer class="footer">
         <div class="container" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between">
@@ -311,7 +441,7 @@
           character:"Спокойные, ласковые, тихие, любят комфорт и покой.",
           care:"Ежедневное расчесывание, уход за глазами и носом.",
           suitableDetail:"Идеальны для спокойных домов без маленьких детей.",
-          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/persian.jpeg",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/pers_.png",
           breeders:[
             {name:"Персидские принцессы", ig:"@persian_princesses"},
             {name:"Роскошные мурлыки", ig:"@luxury_purrs"}
@@ -432,7 +562,7 @@
     };
 
     // State
-    let currentCategory=null, quizAnswers={};
+    let currentCategory=null, quizAnswers={}, isSearchActive=false, cameFromSearch=false, cameFromQuiz=false;
 
     // DOM Elements - cached for performance
     const pages = {main: byId("main"), category: byId("category"), detail: byId("detail"), quiz: byId("quiz")};
@@ -519,10 +649,11 @@
         img.alt = title;
         img.style.width = "100%";
         img.style.height = "100%";
-        img.style.objectFit = "cover";
+        img.style.objectFit = "contain";
         img.style.borderRadius = "12px";
         img.style.maxWidth = "100%";
         img.style.maxHeight = "100%";
+        img.style.padding = "8px";
         // Обработка ошибки загрузки изображения
         img.onerror = function() {
           ph.textContent = "Фото";
@@ -560,21 +691,62 @@
       return el;
     }
 
+    // Search state management
+    function activateSearchMode() {
+      isSearchActive = true;
+      pages.main.classList.add('search-active');
+    }
+    
+    function deactivateSearchMode() {
+      isSearchActive = false;
+      pages.main.classList.remove('search-active');
+      searchInput.value = '';
+      if (searchGrid) searchGrid.innerHTML = '';
+      const searchResultsTitle = byId('search-results-title');
+      if (searchResultsTitle) searchResultsTitle.textContent = 'Результаты поиска';
+    }
+
     // Optimized search with debouncing
     const debouncedSearch = debounce((query) => {
-      const results = query ? allBreeds().filter(b=>
-        b.name.toLowerCase().includes(query)||b.short.toLowerCase().includes(query)
-      ) : [];
-      renderBreedCards(results, searchGrid, true);
+      if (query.trim()) {
+        activateSearchMode();
+        const results = allBreeds().filter(b=>
+          b.name.toLowerCase().includes(query)||b.short.toLowerCase().includes(query)
+        );
+        renderBreedCards(results, searchGrid, true);
+        
+        // Update search results title
+        const searchResultsTitle = byId('search-results-title');
+        if (searchResultsTitle) {
+          searchResultsTitle.textContent = `Результаты поиска (${results.length})`;
+        }
+      } else {
+        deactivateSearchMode();
+      }
     }, 300);
 
+    // Search event listeners
     searchInput.addEventListener("input", (e)=>{
       debouncedSearch(e.target.value.trim().toLowerCase());
+    });
+    
+    searchInput.addEventListener("focus", () => {
+      if (searchInput.value.trim()) {
+        activateSearchMode();
+      }
+    });
+    
+    searchInput.addEventListener("blur", () => {
+      if (!searchInput.value.trim()) {
+        deactivateSearchMode();
+      }
     });
 
     // Category
     function openCategory(id){
       currentCategory=id;
+      cameFromSearch = false; // Reset flag when opening category normally
+      cameFromQuiz = false; // Reset flag when opening category normally
       catTitle.textContent = appData.categories[id].name;
       const items = allBreeds().filter(b=>b.category===id);
       catGrid.innerHTML=""; 
@@ -610,6 +782,17 @@
 
     // Detail
     function openBreed(b){
+      // Clear search if we're coming from search results
+      if (isSearchActive) {
+        cameFromSearch = true;
+        cameFromQuiz = false;
+        deactivateSearchMode();
+      } else {
+        cameFromSearch = false;
+        // Check if we're in quiz page to determine if coming from quiz
+        cameFromQuiz = pages.quiz.classList.contains('active');
+      }
+      
       detailTitle.textContent = b.name;
       detailName.textContent = b.name;
       detailOrigin.textContent = b.origin;
@@ -731,49 +914,9 @@
       console.log('Результаты квиза:', rated);
         
       if (rated.length > 0) {
-        rated.forEach(x => {
-          const card = document.createElement("article");
-          card.className = "card";
-          
-          const ph = document.createElement("div");
-          ph.className = "ph";
-          
-          if (x.breed.image) {
-            const img = document.createElement("img");
-            img.src = x.breed.image;
-            img.alt = x.breed.name;
-            img.style.cssText = "width:100%;height:100%;object-fit:contain;border-radius:12px";
-            ph.appendChild(img);
-          } else {
-            ph.textContent = "Фото";
-          }
-          
-          const h3 = document.createElement("h3");
-          h3.textContent = x.breed.name;
-          
-          const pct = document.createElement("div");
-          pct.className = "muted";
-          pct.textContent = `${x.pct}% совпадение`;
-          
-          const suitable = document.createElement("div");
-          suitable.className = "muted";
-          suitable.style.marginTop = "6px";
-          suitable.textContent = x.breed.suitable;
-          
-          const button = document.createElement("button");
-          button.className = "btn btn--primary";
-          button.style.marginTop = "10px";
-          button.textContent = "Подробнее";
-          button.onclick = () => openBreedFromResults(x.breed.id);
-          
-          card.appendChild(ph);
-          card.appendChild(h3);
-          card.appendChild(pct);
-          card.appendChild(suitable);
-          card.appendChild(button);
-          
-          resultsGrid.appendChild(card);
-        });
+        // Use the same renderBreedCards function as search results
+        const breeds = rated.map(x => x.breed);
+        renderBreedCards(breeds, resultsGrid, true);
       } else {
         resultsGrid.innerHTML = `<div class="muted">Нет совпадений — поменяйте ответы</div>`;
       }
@@ -783,11 +926,37 @@
 
     // Navigation with passive event listeners
     byId("back-main").onclick=()=>show("main");
-    byId("back-category").onclick=()=>show("category");
+    byId("back-category").onclick=()=>{
+      if (cameFromSearch) {
+        show("main");
+        cameFromSearch = false;
+      } else if (cameFromQuiz) {
+        show("main");
+        cameFromQuiz = false;
+      } else {
+        show("category");
+      }
+    };
     byId("to-quiz-top").onclick=()=>{renderQuiz(); show("quiz")};
     byId("back-main-from-quiz").onclick=()=>show("main");
     byId("show-results").onclick=resultsFromQuiz;
     byId("reset-quiz").onclick=()=>renderQuiz();
+    
+    // Compact category icon event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      const categoryIcons = document.querySelectorAll('.category-icon');
+      categoryIcons.forEach(icon => {
+        icon.addEventListener('click', function() {
+          const categoryId = this.getAttribute('data-category');
+          if (categoryId) {
+            // Clear search and deactivate search mode
+            deactivateSearchMode();
+            // Navigate to the selected category
+            openCategory(categoryId);
+          }
+        });
+      });
+    });
 
     // Initialize with error handling
     function init() {
@@ -864,9 +1033,10 @@
               img.style.cssText = `
                 width: 100%;
                 height: 100%;
-                object-fit: contain;
-                border-radius: 12px;
-                background-color: rgb(23, 26, 28);
+        object-fit: contain;
+        border-radius: 12px;
+        background: transparent;
+        padding: 8px;
               `;
               
               // Обработка ошибки загрузки изображения
@@ -978,7 +1148,7 @@
         object-fit: contain;
         border-radius: 12px;
         display: block;
-        background-color: rgb(23, 26, 28);
+        background: transparent;
       `;
       
       // Обработка успешной загрузки
@@ -1208,9 +1378,10 @@
             img.style.cssText = `
               width: 100%;
               height: 100%;
-              object-fit: contain;
-              border-radius: 12px;
-              background-color: rgb(23, 26, 28);
+        object-fit: contain;
+        border-radius: 12px;
+        background: transparent;
+        padding: 8px;
             `;
             
             // Обработка ошибки загрузки изображения
