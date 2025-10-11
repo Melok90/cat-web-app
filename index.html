@@ -11,6 +11,11 @@
   <!-- Preload critical resources -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Preload критических изображений для ускорения загрузки -->
+  <link rel="preload" as="image" href="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hero.png">
+  <link rel="preload" as="image" href="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png">
+  <link rel="preload" as="image" href="https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   
   <!-- Supabase CDN -->
@@ -34,15 +39,18 @@
     .container{max-width:1100px;margin:0 auto;padding:0 16px}
     .page{display:none;min-height:100dvh}
     .page.active{display:flex;flex-direction:column}
-    header.site{padding:32px 0 8px}
+    header.site{padding:32px 0 8px;text-align:center}
     .title{font-size:32px;font-weight:800;margin:0 0 6px}
     .subtitle{margin:0 0 18px;color:var(--muted)}
-    .search-row{display:flex;gap:var(--gap-3);align-items:center;flex-wrap:wrap}
-    .search{flex:1;min-width:200px;display:flex;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    .hero-image-container{display:flex;justify-content:center;margin:24px 0}
+    .hero-image{width:100%;max-width:400px;height:280px;object-fit:contain;border-radius:var(--radius-lg);box-shadow:0 8px 32px rgba(0,0,0,0.12);transition:transform 0.3s ease}
+    .hero-image:hover{transform:translateY(-4px)}
+    .search-row{display:flex;gap:var(--gap-3);align-items:center;flex-wrap:wrap;justify-content:center}
+    .search{flex:1;min-width:200px;max-width:300px;display:flex;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
     .search input{
-      width:100%;padding:14px 14px 14px 44px;background:transparent;border:0;color:var(--text);outline:none;
+      width:100%;padding:12px 14px 12px 44px;background:transparent;border:0;color:var(--text);outline:none;
       background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%239AA3AD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
-      background-repeat:no-repeat;background-position:12px center;font-size:16px;
+      background-repeat:no-repeat;background-position:12px center;font-size:16px;min-height:44px;
     }
     .btn{display:inline-flex;align-items:center;justify-content:center;
       gap:10px;padding:12px 16px;border-radius:12px;border:1px solid var(--border);background:var(--surface);
@@ -53,13 +61,14 @@
     .btn--primary:hover{background:var(--primary-700)}
     .btn:active{transform:translateY(0)}
     .grid{display:flex;flex-wrap:wrap;gap:var(--gap-6)}
-    .card{flex:1 1 280px;max-width:calc(50% - var(--gap-6)/2);display:flex;flex-direction:column;gap:12px;
+    .card{flex:1 1 280px;max-width:calc(50% - var(--gap-6)/2);min-width:280px;width:100%;display:flex;flex-direction:column;gap:12px;
       background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;transition:.15s ease;
       cursor:pointer;touch-action:manipulation;
     }
+    .ph--black{background:rgb(23,26,28) !important}
     .card:hover{transform:translateY(-2px)}
     .card:active{transform:translateY(0)}
-    .ph{height:200px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;color:#a3aab3;overflow:hidden}
+    .ph{height:200px;border-radius:12px;background:transparent;display:flex;align-items:center;justify-content:center;color:#a3aab3;overflow:hidden}
     .ph img{width:100%;height:100%;object-fit:contain;border-radius:12px}
     .card h3{margin:0 0 6px;font-size:18px;font-weight:600}
     .muted{color:var(--muted);font-size:14px;line-height:1.4}
@@ -91,8 +100,9 @@
       .card{max-width:100%}
       .ph{height:180px}
       .title{font-size:28px}
-      .search-row{flex-direction:column;align-items:stretch}
-      .search{min-width:auto}
+      .hero-image{max-width:350px;height:240px;object-fit:contain}
+      .search-row{flex-direction:column;align-items:center}
+      .search{min-width:auto;max-width:300px;width:100%}
       .btn{width:100%;justify-content:center}
       .detail-hero{flex-direction:column}
       .hero-img{flex:none;width:100%}
@@ -101,18 +111,23 @@
       .breeder{flex-direction:column;align-items:flex-start;gap:8px}
       .opts{flex-direction:column}
       .opt{width:100%}
+      .section-title{text-align:center}
+      .grid{justify-content:center}
     }
     
     @media (max-width:480px){
       .container{padding:0 12px}
       header.site{padding:24px 0 8px}
       .title{font-size:24px}
+      .hero-image{max-width:300px;height:200px;object-fit:contain}
       .card{padding:12px}
       .ph{height:160px}
       .btn{padding:14px 16px;font-size:16px}
-      .search input{padding:16px 16px 16px 48px;font-size:16px}
+      .search input{padding:12px 16px 12px 48px;font-size:16px;min-height:44px}
       .topbar{gap:8px}
       .topbar .back{padding:12px 14px}
+      .section-title{text-align:center}
+      .grid{justify-content:center}
     }
     
     /* Performance optimizations */
@@ -134,7 +149,7 @@
         --muted: #6c727a;
         --border: #e1e5e9;
       }
-      .ph{background:#f8f9fa;color:#6c727a}
+      .ph{background:transparent;color:#6c727a}
       .hero-img{background:#f8f9fa}
     }
   </style>
@@ -145,6 +160,9 @@
       <header class="site">
         <h1 class="title">Гид по породам кошек</h1>
         <p class="subtitle">Поможем найти идеальную породу для вашего дома</p>
+        <div class="hero-image-container">
+          <img id="hero-image" alt="Разнообразные породы кошек" class="hero-image">
+        </div>
         <div class="search-row">
           <div class="search"><input id="search" placeholder="Поиск по породам..." /></div>
         </div>
@@ -471,14 +489,15 @@
         const el = card({
           title:cat.title,
           subtitle:"Нажмите, чтобы открыть",
-          onClick:()=>openCategory(cat.id)
+          onClick:()=>openCategory(cat.id),
+          categoryId: cat.id
         });
         catsCats.appendChild(el);
       });
     }
 
     // Generic card with accessibility improvements
-    function card({title, subtitle, onClick, chip, image}){
+    function card({title, subtitle, onClick, chip, image, categoryId}){
       const el=document.createElement("article"); 
       el.className="card"; 
       el.tabIndex=0;
@@ -488,9 +507,15 @@
       const ph=document.createElement("div"); 
       ph.className="ph"; 
       
-      if (image) {
+      // Проверяем, есть ли изображение для категории в глобальной переменной
+      let imageUrl = image;
+      if (!imageUrl && categoryId && window.categoryImages && window.categoryImages[categoryId]) {
+        imageUrl = window.categoryImages[categoryId];
+      }
+      
+      if (imageUrl) {
         const img = document.createElement("img");
-        img.src = image;
+        img.src = imageUrl;
         img.alt = title;
         img.style.width = "100%";
         img.style.height = "100%";
@@ -774,12 +799,440 @@
         if (catSection) {
           catSection.style.display = 'none';
         }
+        
+        // Устанавливаем изображение для длинношерстных пород через небольшую задержку
+        setTimeout(() => {
+          window.forceSetLonghairImageDirect();
+          window.forceSetShorthairImageDirect();
+          window.forceSetHairlessImageDirect();
+          window.forceSetExoticImageDirect();
+          ensureEqualCardSizes();
+        }, 500);
+        
         console.log('Application initialized successfully');
       } catch (error) {
         console.error('Error initializing application:', error);
       }
     }
+    
+    // Функция для обновления карточек категорий после загрузки изображений
+    function updateCategoryCardsWithImages() {
+      console.log('Обновляем карточки категорий...');
+      console.log('window.categoryImages:', window.categoryImages);
+      
+      if (!window.categoryImages) {
+        console.log('Нет изображений категорий');
+        return;
+      }
+      
+      const catsCatsElement = document.getElementById('cats-cats');
+      if (!catsCatsElement) {
+        console.log('Элемент cats-cats не найден');
+        return;
+      }
+      
+      const categoryCards = catsCatsElement.querySelectorAll('.card');
+      console.log('Найдено карточек категорий:', categoryCards.length);
+      
+      categoryCards.forEach((card, index) => {
+        const imageContainer = card.querySelector('.ph');
+        if (imageContainer) {
+          console.log(`Карточка ${index}:`, imageContainer.textContent);
+          
+          if (imageContainer.textContent === 'Фото') {
+            // Получаем ID категории из заголовка
+            const title = card.querySelector('h3').textContent;
+            let categoryId = '';
+            
+            if (title.includes('Длинношерстные')) categoryId = 'longhair';
+            else if (title.includes('Короткошерстные')) categoryId = 'shorthair';
+            else if (title.includes('Бесшерстные')) categoryId = 'hairless';
+            else if (title.includes('Экзотические')) categoryId = 'exotic';
+            
+            console.log(`Категория для "${title}": ${categoryId}`);
+            
+            if (categoryId && window.categoryImages[categoryId]) {
+              console.log(`Загружаем изображение для ${categoryId}:`, window.categoryImages[categoryId]);
+              
+              // Очищаем контейнер
+              imageContainer.innerHTML = '';
+              
+              // Создаем изображение
+              const img = document.createElement('img');
+              img.src = window.categoryImages[categoryId];
+              img.alt = title;
+              img.style.cssText = `
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                border-radius: 12px;
+                background-color: rgb(23, 26, 28);
+              `;
+              
+              // Обработка ошибки загрузки изображения
+              img.onerror = function() {
+                console.log('Ошибка загрузки изображения для', categoryId);
+                imageContainer.textContent = "Фото";
+                imageContainer.setAttribute('aria-hidden', 'true');
+              };
+              
+              // Обработка успешной загрузки
+              img.onload = function() {
+                console.log('Изображение успешно загружено для', categoryId);
+                imageContainer.removeAttribute('aria-hidden');
+              };
+              
+              imageContainer.appendChild(img);
+            } else {
+              console.log(`Нет изображения для категории ${categoryId}`);
+            }
+          }
+        }
+      });
+    }
 
+    // Функция для принудительного обновления карточек категорий (для тестирования)
+    window.forceUpdateCategoryImages = function() {
+      console.log('Принудительное обновление изображений категорий...');
+      updateCategoryCardsWithImages();
+    };
+    
+    // Функция для установки всех изображений категорий
+    window.setAllCategoryImages = function() {
+      console.log('Устанавливаем изображения для всех категорий...');
+      
+      const categoryImages = {
+        longhair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png',
+        shorthair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/short-haired.png',
+        hairless: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.jpg',
+        exotic: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/exotic.png'
+      };
+      
+      // Устанавливаем глобальную переменную
+      window.categoryImages = categoryImages;
+      
+      // Обновляем карточки
+      updateCategoryCardsWithImages();
+      
+      console.log('Все изображения категорий установлены:', categoryImages);
+    };
+    
+    // Кэш для изображений
+    const imageCache = new Map();
+    
+    // Функция предзагрузки изображений
+    function preloadImages() {
+      const imageUrls = [
+        'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hero.png',
+        'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png',
+        'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.png'
+      ];
+      
+      imageUrls.forEach(url => {
+        const img = new Image();
+        img.onload = function() {
+          console.log('Предзагружено изображение:', url);
+          imageCache.set(url, img);
+        };
+        img.src = url;
+      });
+    }
+    
+    // Запускаем предзагрузку при загрузке страницы
+    preloadImages();
+    
+    // Функция для обеспечения одинаковых размеров всех карточек
+    function ensureEqualCardSizes() {
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        // Принудительно устанавливаем одинаковые размеры
+        card.style.minWidth = '280px';
+        card.style.width = '100%';
+        card.style.flex = '1 1 280px';
+        card.style.maxWidth = 'calc(50% - var(--gap-6)/2)';
+      });
+      console.log('Размеры всех карточек унифицированы');
+    }
+    
+    // Глобальная функция для ручного вызова
+    window.ensureEqualCardSizes = ensureEqualCardSizes;
+    
+    // Оптимизированная функция загрузки изображений
+    function loadImageOptimized(src, alt, container, onLoad, onError) {
+      // Проверяем кэш
+      if (imageCache.has(src)) {
+        const cachedImg = imageCache.get(src);
+        container.innerHTML = '';
+        container.appendChild(cachedImg.cloneNode());
+        if (onLoad) onLoad();
+        return;
+      }
+      
+      // Создаем новое изображение
+      const img = new Image();
+      img.src = src;
+      img.alt = alt;
+      img.style.cssText = `
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 12px;
+        display: block;
+        background-color: rgb(23, 26, 28);
+      `;
+      
+      // Обработка успешной загрузки
+      img.onload = function() {
+        // Кэшируем изображение
+        imageCache.set(src, img.cloneNode());
+        container.innerHTML = '';
+        container.appendChild(img);
+        if (onLoad) onLoad();
+      };
+      
+      // Обработка ошибки
+      img.onerror = function() {
+        if (onError) onError();
+      };
+    }
+
+    // Функция для принудительной установки изображения короткошерстных пород
+    window.forceSetShorthairImageDirect = function() {
+      console.log('Принудительно устанавливаем изображение короткошерстных пород...');
+      
+      const catsCatsElement = document.getElementById('cats-cats');
+      if (!catsCatsElement) {
+        console.error('Элемент cats-cats не найден');
+        return;
+      }
+      
+      const categoryCards = catsCatsElement.querySelectorAll('.card');
+      categoryCards.forEach(card => {
+        const title = card.querySelector('h3').textContent;
+        if (title.includes('Короткошерстные')) {
+          const imageContainer = card.querySelector('.ph');
+          if (imageContainer) {
+            console.log('Найдена карточка короткошерстных пород, устанавливаем изображение...');
+            
+            loadImageOptimized(
+              'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/short-haired.png',
+              'Короткошерстные породы',
+              imageContainer,
+              function() {
+                console.log('Изображение short-haired.png успешно загружено');
+                imageContainer.removeAttribute('aria-hidden');
+              },
+              function() {
+                console.log('Ошибка загрузки изображения short-haired.png');
+                imageContainer.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Ошибка загрузки</div>';
+                imageContainer.setAttribute('aria-hidden', 'true');
+              }
+            );
+            
+            console.log('Изображение short-haired.png установлено для карточки короткошерстных пород');
+          }
+        }
+      });
+    };
+
+    // Функция для принудительной установки изображения экзотических пород
+    window.forceSetExoticImageDirect = function() {
+      console.log('Принудительно устанавливаем изображение экзотических пород...');
+      
+      const catsCatsElement = document.getElementById('cats-cats');
+      if (!catsCatsElement) {
+        console.error('Элемент cats-cats не найден');
+        return;
+      }
+      
+      const categoryCards = catsCatsElement.querySelectorAll('.card');
+      categoryCards.forEach(card => {
+        const title = card.querySelector('h3').textContent;
+        if (title.includes('Экзотические')) {
+          const imageContainer = card.querySelector('.ph');
+          if (imageContainer) {
+            console.log('Найдена карточка экзотических пород, устанавливаем изображение...');
+            
+            loadImageOptimized(
+              'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/exotic.png',
+              'Экзотические и редкие породы',
+              imageContainer,
+              function() {
+                console.log('Изображение exotic.png успешно загружено для экзотических пород');
+                imageContainer.removeAttribute('aria-hidden');
+              },
+              function() {
+                console.log('Ошибка загрузки изображения exotic.png для экзотических пород');
+                imageContainer.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Ошибка загрузки</div>';
+                imageContainer.setAttribute('aria-hidden', 'true');
+              }
+            );
+            
+            console.log('Изображение exotic.png установлено для карточки экзотических пород');
+          }
+        }
+      });
+    };
+
+    // Функция для принудительной установки изображения бесшерстных пород
+    window.forceSetHairlessImageDirect = function() {
+      console.log('Принудительно устанавливаем изображение бесшерстных пород...');
+      
+      const catsCatsElement = document.getElementById('cats-cats');
+      if (!catsCatsElement) {
+        console.error('Элемент cats-cats не найден');
+        return;
+      }
+      
+      const categoryCards = catsCatsElement.querySelectorAll('.card');
+      categoryCards.forEach(card => {
+        const title = card.querySelector('h3').textContent;
+        if (title.includes('Бесшерстные')) {
+          const imageContainer = card.querySelector('.ph');
+          if (imageContainer) {
+            console.log('Найдена карточка бесшерстных пород, устанавливаем изображение...');
+            
+            loadImageOptimized(
+              'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.png',
+              'Бесшерстные породы',
+              imageContainer,
+              function() {
+                console.log('Изображение hairless.png успешно загружено для бесшерстных пород');
+                imageContainer.removeAttribute('aria-hidden');
+              },
+              function() {
+                console.log('Ошибка загрузки изображения hairless.png для бесшерстных пород');
+                imageContainer.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Ошибка загрузки</div>';
+                imageContainer.setAttribute('aria-hidden', 'true');
+              }
+            );
+            
+            console.log('Изображение hairless.png установлено для карточки бесшерстных пород');
+          }
+        }
+      });
+    };
+
+    // Функция для принудительной установки изображения длинношерстных пород
+    window.forceSetLonghairImageDirect = function() {
+      console.log('Принудительно устанавливаем изображение длинношерстных пород...');
+      
+      const catsCatsElement = document.getElementById('cats-cats');
+      if (!catsCatsElement) {
+        console.error('Элемент cats-cats не найден');
+        return;
+      }
+      
+      const categoryCards = catsCatsElement.querySelectorAll('.card');
+      categoryCards.forEach(card => {
+        const title = card.querySelector('h3').textContent;
+        if (title.includes('Длинношерстные')) {
+          const imageContainer = card.querySelector('.ph');
+          if (imageContainer) {
+            console.log('Найдена карточка длинношерстных пород, устанавливаем изображение...');
+            
+            loadImageOptimized(
+              'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png',
+              'Длинношерстные породы',
+              imageContainer,
+              function() {
+                console.log('Изображение long-haired.png успешно загружено');
+                imageContainer.removeAttribute('aria-hidden');
+              },
+              function() {
+                console.log('Ошибка загрузки изображения long-haired.png');
+                imageContainer.innerHTML = '<div style="color: white; text-align: center; padding: 20px;">Ошибка загрузки</div>';
+              }
+            );
+            
+            console.log('Изображение long-haired.png установлено для карточки длинношерстных пород');
+          }
+        }
+      });
+    };
+    
+    // Функция для установки черного фона для изображения длинношерстных пород
+    window.setLonghairBlackBackground = function() {
+      console.log('Устанавливаем черный фон для изображения длинношерстных пород...');
+      
+      const catsCatsElement = document.getElementById('cats-cats');
+      if (!catsCatsElement) {
+        console.error('Элемент cats-cats не найден');
+        return;
+      }
+      
+      const categoryCards = catsCatsElement.querySelectorAll('.card');
+      categoryCards.forEach(card => {
+        const title = card.querySelector('h3').textContent;
+        if (title.includes('Длинношерстные')) {
+          const imageContainer = card.querySelector('.ph');
+          if (imageContainer) {
+            imageContainer.classList.add('ph--black');
+            // Принудительно устанавливаем темный фон через style
+            imageContainer.style.backgroundColor = 'rgb(23, 26, 28)';
+            console.log('Темный фон (rgb(23, 26, 28)) установлен для изображения длинношерстных пород');
+          }
+        }
+      });
+    };
+    
+    // Функция для принудительной установки изображения длинношерстных пород
+    window.forceSetLonghairImage = function() {
+      console.log('Принудительно устанавливаем изображение для длинношерстных пород...');
+      
+      const catsCatsElement = document.getElementById('cats-cats');
+      if (!catsCatsElement) {
+        console.error('Элемент cats-cats не найден');
+        return;
+      }
+      
+      const categoryCards = catsCatsElement.querySelectorAll('.card');
+      categoryCards.forEach(card => {
+        const title = card.querySelector('h3').textContent;
+        if (title.includes('Длинношерстные')) {
+          console.log('Найдена карточка длинношерстных пород, обновляем изображение и стили...');
+          
+          const imageContainer = card.querySelector('.ph');
+          if (imageContainer) {
+            // Добавляем класс с темным фоном к контейнеру изображения
+            imageContainer.classList.add('ph--black');
+            // Принудительно устанавливаем темный фон через style
+            imageContainer.style.backgroundColor = 'rgb(23, 26, 28)';
+            // Очищаем контейнер
+            imageContainer.innerHTML = '';
+            
+            // Создаем изображение
+            const img = document.createElement('img');
+            img.src = 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png';
+            img.alt = 'Длинношерстные породы';
+            img.style.cssText = `
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              border-radius: 12px;
+              background-color: rgb(23, 26, 28);
+            `;
+            
+            // Обработка ошибки загрузки изображения
+            img.onerror = function() {
+              console.log('Ошибка загрузки изображения long-haired.png');
+              imageContainer.textContent = "Фото";
+              imageContainer.setAttribute('aria-hidden', 'true');
+            };
+            
+            // Обработка успешной загрузки
+            img.onload = function() {
+              console.log('Изображение long-haired.png успешно загружено');
+              imageContainer.removeAttribute('aria-hidden');
+            };
+            
+            imageContainer.appendChild(img);
+            console.log('Изображение long-haired.png и черный фон установлены для карточки длинношерстных пород');
+          }
+        }
+      });
+    };
+    
     // Start the application when DOM is loaded
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', init);
