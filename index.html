@@ -31,13 +31,12 @@
     html,body{height:100%}
     body{
       margin:0;
-      padding:0 8px;
       font-family:Nunito,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--text); background:linear-gradient(180deg,#0f1113 0%,#111416 100%);
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
     a{color:inherit}
-    .container{max-width:900px;margin:0 auto;padding:0 20px}
+    .container{max-width:900px;margin:0 auto;padding:0 16px}
     .page{display:none;min-height:100dvh}
     .page.active{display:flex;flex-direction:column}
     header.site{padding:32px 0 8px;text-align:center}
@@ -61,7 +60,7 @@
     .btn--primary:hover{background:linear-gradient(135deg, #1f8b55 0%, #7c3aed 100%);transform:translateY(-1px)}
     .btn:active{transform:translateY(0)}
     .grid{display:flex;flex-wrap:wrap;gap:var(--gap-6)}
-    .card{flex:1 1 280px;max-width:calc(50% - var(--gap-6)/2);min-width:280px;width:100%;display:flex;flex-direction:column;gap:12px;
+    .card{flex:1 1 280px;max-width:422px;min-width:280px;width:100%;display:flex;flex-direction:column;gap:12px;
       background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;transition:.15s ease;
       cursor:pointer;touch-action:manipulation;
     }
@@ -78,34 +77,172 @@
     .footer{margin-top:auto;border-top:1px solid var(--border);padding:20px 0;color:var(--muted);font-size:14px}
     .topbar{display:flex;align-items:center;gap:10px;margin:10px 0;flex-wrap:wrap}
     .topbar .back{padding:10px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--border);min-height:44px;color:var(--text)}
-    .detail-hero{display:flex;gap:20px;flex-wrap:wrap}
-    .hero-img{flex:1 1 320px;height:260px;background:#fff;border-radius:14px}
-    .hero-info{flex:2 1 320px;display:flex;flex-direction:column;gap:10px}
+    .detail-hero{display:flex;gap:12px;flex-wrap:wrap}
+    .hero-img{flex:1 1 320px;max-width:422px;height:260px;background:var(--surface);border:1px solid var(--border);border-radius:14px}
+    .hero-info{flex:1 1 auto;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
     .cols{display:flex;gap:var(--gap-6);flex-wrap:wrap}
     .box{flex:1 1 320px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px}
     .list{display:flex;flex-direction:column;gap:12px}
-    .breeder{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+    .breeder{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
     .link{color:#86d3ff;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
     .link:hover{text-decoration:underline}
+    
+    /* Стили для иконок в разделах */
+    .section-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+      display: inline-block;
+      vertical-align: middle;
+      fill: var(--primary);
+    }
+    
+    .section-title-with-icon {
+      display: flex;
+      align-items: center;
+      margin: 0 0 10px;
+    }
+    
+    /* Стили для модального окна */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      max-width: 400px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-close:hover {
+      color: var(--text);
+    }
+    
+    .modal-body {
+      padding: 20px;
+    }
+    
+    .modal-cat-info {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    
+    .form-group {
+      margin-bottom: 16px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    .error-message {
+      color: #ff6b6b;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+    
+    .form-actions .btn {
+      min-width: 100px;
+    }
+    
+    /* Стили для кнопок бронирования */
+    .booking-btn.booked {
+      background: var(--muted) !important;
+      border-color: var(--muted) !important;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    
+    .booking-btn.booked:hover {
+      transform: none !important;
+    }
     .quiz{display:flex;flex-direction:column;gap:16px}
     .q{display:flex;flex-direction:column;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px}
     .opts{display:flex;flex-wrap:wrap;gap:10px}
     .opt{padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:#15181a;cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:center;text-align:center;transition:.15s ease}
     .opt input{display:none}
-    .opt.active,.opt:hover{background:#1a1f22;border-color:#2c3238}
+    .opt.active{background:#2ea56a;border-color:#2ea56a;color:#ffffff}
+    .opt:hover{background:#1a1f22;border-color:#2c3238}
     .opt:active{transform:scale(0.98)}
     
     /* Mobile optimizations */
     @media (max-width:840px){
-      .card{max-width:100%}
+      .card{max-width:422px}
       .ph{height:180px;padding:6px}
       .title{font-size:28px}
       .hero-image{max-width:350px;height:240px;object-fit:contain}
       .search-row{flex-direction:column;align-items:center}
       .search{min-width:auto;max-width:300px;width:100%}
       .btn{width:100%;justify-content:center}
-      .detail-hero{flex-direction:column}
-      .hero-img{flex:none;width:100%}
+      .detail-hero{flex-direction:column;gap:8px}
+      .hero-img{flex:none;width:100%;max-width:422px}
       .cols{flex-direction:column}
       .box{flex:none;width:100%}
       .breeder{flex-direction:column;align-items:flex-start;gap:8px}
@@ -129,8 +266,7 @@
     }
     
     @media (max-width:480px){
-      body{padding:0 4px}
-      .container{padding:0 16px}
+      .container{padding:0 12px}
       header.site{padding:24px 0 8px}
       .title{font-size:24px}
       .hero-image{max-width:300px;height:200px;object-fit:contain}
@@ -184,6 +320,7 @@
       object-fit: contain;
       border-radius: 8px;
       padding: 4px;
+      background: transparent;
     }
     
     .category-icon:hover {
@@ -226,29 +363,6 @@
       margin-bottom: 24px;
     }
     
-    /* Very small screens */
-    @media (max-width: 320px) {
-      body {
-        padding: 0 2px;
-      }
-      
-      .container {
-        padding: 0 12px;
-      }
-      
-      .title {
-        font-size: 20px;
-      }
-      
-      .card {
-        padding: 8px;
-      }
-      
-      .ph {
-        height: 120px;
-      }
-    }
-    
     /* Dark mode support */
     @media (prefers-color-scheme: light) {
       :root {
@@ -259,7 +373,7 @@
         --border: #e1e5e9;
       }
       .ph{background:transparent;color:#6c727a}
-      .hero-img{background:#f8f9fa}
+      .hero-img{background:var(--surface);border:1px solid var(--border)}
     }
   </style>
 </head>
@@ -354,21 +468,41 @@
 
       <div class="cols" style="margin-top:18px">
         <div class="box">
-          <h4 style="margin:0 0 10px">Характер</h4>
+          <h4 class="section-title-with-icon">
+            <svg class="section-icon" viewBox="0 0 24 24">
+              <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V21C3 22.11 3.89 23 5 23H19C20.11 23 21 22.11 21 21V9M19 9H14V4H5V21H19V9Z"/>
+            </svg>
+            Характер
+          </h4>
           <div id="detail-character" class="muted"></div>
         </div>
         <div class="box">
-          <h4 style="margin:0 0 10px">Особенности ухода</h4>
+          <h4 class="section-title-with-icon">
+            <svg class="section-icon" viewBox="0 0 24 24">
+              <path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/>
+            </svg>
+            Особенности ухода
+          </h4>
           <div id="detail-care" class="muted"></div>
         </div>
         <div class="box">
-          <h4 style="margin:0 0 10px">Кому подходит</h4>
+          <h4 class="section-title-with-icon">
+            <svg class="section-icon" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12S6.48 22 12 22 22 17.52 22 12 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z"/>
+            </svg>
+            Кому подходит
+          </h4>
           <div id="detail-suitable-detail" class="muted"></div>
         </div>
       </div>
 
       <div class="box" style="margin-top:18px">
-        <h4 style="margin:0 0 10px">Питомники в России</h4>
+        <h4 class="section-title-with-icon">
+          <svg class="section-icon" viewBox="0 0 24 24">
+            <path d="M12 2L2 7L12 12L22 7L12 2ZM2 17L12 22L22 17M2 12L12 17L22 12"/>
+          </svg>
+          Питомники в России
+        </h4>
         <div id="detail-breeders" class="list"></div>
       </div>
     </div>
@@ -392,6 +526,30 @@
     </div>
   </section>
 
+  <!-- Модальное окно для бронирования -->
+  <div id="booking-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Забронировать кошку</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p id="modal-cat-info" class="modal-cat-info"></p>
+        <form id="booking-form">
+          <div class="form-group">
+            <label for="booking-email">Email для связи:</label>
+            <input type="email" id="booking-email" name="email" required placeholder="your@email.com">
+            <div id="email-error" class="error-message" style="display: none;"></div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn" id="modal-cancel">Отмена</button>
+            <button type="submit" class="btn btn--primary" id="modal-submit">Забронировать</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Optimized JavaScript with performance improvements
     const appData = {
@@ -411,10 +569,11 @@
           character:"Дружелюбные, общительные, игривые, хорошо ладят с детьми.",
           care:"Расчесывать 2–3 раза в неделю, простор для активности.",
           suitableDetail:"Идеальны для семей, любящих активное общение с питомцем.",
-          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/main-kun.jpeg",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/main-kun.png",
           breeders:[
-            {name:"Русские гиганты", ig:"@russian_giants_mainecoon"},
-            {name:"Северный ветер", ig:"@north_wind_coons"}
+            {name:"Мейн-кун клуб России", ig:"@mainecoon_russia", website:"https://mainecoon-russia.ru"},
+            {name:"Северные гиганты", ig:"@northern_giants_cattery"},
+            {name:"Русские гиганты", ig:"@russian_giants", website:"https://russian-giants.ru"}
           ],
           traits:{experience:"medium", space:"high", care:"medium", activity:"medium", children:"high", special_care:"medium", exotic:"low"}
         },
@@ -426,10 +585,11 @@
           character:"Умные, преданные, игривые, хорошо ладят с детьми и животными.",
           care:"Расчесывать 2–3 раза в неделю, особенно в период линьки.",
           suitableDetail:"Отлично подходят для семей с детьми и другими животными.",
-          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/siberian.jpeg",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/siberian.png",
           breeders:[
-            {name:"Сибирские красавицы", ig:"@siberian_beauties"},
-            {name:"Морозные мурлыки", ig:"@frosty_purrs"}
+            {name:"Сибирский клуб", ig:"@siberian_cat_club"},
+            {name:"Морозные красавицы", ig:"@frosty_siberians"},
+            {name:"Сибирские красавицы", ig:"@siberian_beauties", website:"https://siberian-beauties.ru"}
           ],
           traits:{experience:"medium", space:"medium", care:"medium", activity:"medium", children:"high", special_care:"low", exotic:"low"}
         },
@@ -441,10 +601,10 @@
           character:"Спокойные, ласковые, тихие, любят комфорт и покой.",
           care:"Ежедневное расчесывание, уход за глазами и носом.",
           suitableDetail:"Идеальны для спокойных домов без маленьких детей.",
-          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/pers_.png",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/pers.png",
           breeders:[
-            {name:"Персидские принцессы", ig:"@persian_princesses"},
-            {name:"Роскошные мурлыки", ig:"@luxury_purrs"}
+            {name:"Персидский клуб", ig:"@persian_cat_club"},
+            {name:"Роскошные персы", ig:"@luxury_persians"}
           ],
           traits:{experience:"medium", space:"low", care:"high", activity:"low", children:"low", special_care:"high", exotic:"low"}
         },
@@ -458,8 +618,11 @@
           character:"Сдержанные, преданные, терпеливые, независимые.",
           care:"Простой уход: вычесывание 1–2 раза в неделю.",
           suitableDetail:"Подходит для небольших квартир и размеренного ритма.",
-          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/british.jpeg",
-          breeders:[{name:"Королевские британцы", ig:"@royal_british_moscow"}],
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/british.png",
+          breeders:[
+            {name:"Британский клуб", ig:"@british_cat_club"},
+            {name:"Королевские британцы", ig:"@royal_british", website:"https://royal-british.ru"}
+          ],
           traits:{experience:"low", space:"low", care:"low", activity:"low", children:"medium", special_care:"low", exotic:"low"}
         },
         {
@@ -470,10 +633,10 @@
           character:"Спокойные, умные, преданные, немного застенчивые.",
           care:"Минимальный уход, шерсть не линяет сильно.",
           suitableDetail:"Отлично подходят для квартир и тихих домов.",
-          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/russian_blue.jpeg",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/russian_blue.png",
           breeders:[
-            {name:"Северные голубки", ig:"@northern_blues"},
-            {name:"Архангельские красавицы", ig:"@arkhangelsk_beauties"}
+            {name:"Русская голубая клуб", ig:"@russian_blue_club"},
+            {name:"Северные голубки", ig:"@northern_blues_cattery"}
           ],
           traits:{experience:"low", space:"low", care:"low", activity:"low", children:"medium", special_care:"low", exotic:"low"}
         },
@@ -485,10 +648,10 @@
           character:"Очень активные, любознательные, игривые, умные.",
           care:"Минимальный уход, короткая шерсть.",
           suitableDetail:"Нуждаются в активности и внимании, не подходят для ленивых хозяев.",
-          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/abissin.jpeg",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/abissin.png",
           breeders:[
-            {name:"Абиссинские принцессы", ig:"@abyssinian_princesses"},
-            {name:"Эфиопские красавицы", ig:"@ethiopian_beauties"}
+            {name:"Абиссинский клуб", ig:"@abyssinian_cat_club"},
+            {name:"Эфиопские красавицы", ig:"@ethiopian_beauties_cattery"}
           ],
           traits:{experience:"medium", space:"medium", care:"low", activity:"high", children:"high", special_care:"low", exotic:"medium"}
         },
@@ -502,8 +665,11 @@
           character:"Очень общительные и ласковые, любят внимание.",
           care:"Уход за кожей, контроль температуры, регулярные ванны.",
           suitableDetail:"Нуждаются в тепле и внимании, дружелюбны к детям.",
-          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/sfinks.jpeg",
-          breeders:[{name:"Лунные кошки", ig:"@moon_sphynx_cats"}],
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/sfinks.png",
+          breeders:[
+            {name:"Сфинкс клуб", ig:"@sphynx_cat_club"},
+            {name:"Лунные кошки", ig:"@moon_sphynx", website:"https://moon-sphynx.ru"}
+          ],
           traits:{experience:"high", space:"medium", care:"high", activity:"medium", children:"medium", special_care:"high", exotic:"high"}
         },
         
@@ -516,8 +682,8 @@
           character:"Очень активны и любознательны, нуждаются в стимуляции.",
           care:"Много активности, короткая шерсть, игровые комплексы.",
           suitableDetail:"Лучше в просторном доме, необходима стимуляция.",
-          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/bengal.jpeg",
-          breeders:[{name:"Дикая красота", ig:"@wild_beauty_bengals"}],
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/bengal.png",
+          breeders:[{name:"Бенгальский клуб", ig:"@bengal_cat_club"}],
           traits:{experience:"high", space:"high", care:"low", activity:"high", children:"low", special_care:"medium", exotic:"high"}
         },
         {
@@ -528,10 +694,10 @@
           character:"Активные, игривые, дружелюбные, хорошо ладят с детьми.",
           care:"Стандартный уход, много игр и активности.",
           suitableDetail:"Отлично подходят для семей с детьми, любят игры.",
-          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/toiger.jpeg",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/toiger.png",
           breeders:[
-            {name:"Мини-тигры", ig:"@mini_tigers"},
-            {name:"Полосатые красавцы", ig:"@striped_beauties"}
+            {name:"Тойгер клуб", ig:"@toyger_cat_club"},
+            {name:"Мини-тигры", ig:"@mini_tigers_cattery"}
           ],
           traits:{experience:"medium", space:"medium", care:"low", activity:"high", children:"high", special_care:"low", exotic:"high"}
         }
@@ -654,6 +820,7 @@
         img.style.maxWidth = "100%";
         img.style.maxHeight = "100%";
         img.style.padding = "8px";
+        img.style.background = "transparent";
         // Обработка ошибки загрузки изображения
         img.onerror = function() {
           ph.textContent = "Фото";
@@ -774,6 +941,12 @@
           const ph = el.querySelector(".ph");
           if (ph) ph.style.height="140px";
         }
+        
+        // Добавляем кнопку бронирования
+        if (window.SupabaseCats && window.SupabaseCats.addBookingButtonToCard) {
+          window.SupabaseCats.addBookingButtonToCard(el, b);
+        }
+        
         fragment.appendChild(el);
       });
       
@@ -814,6 +987,7 @@
           img.style.borderRadius = "14px";
           img.style.maxWidth = "100%";
           img.style.maxHeight = "100%";
+          img.style.background = "transparent";
           // Обработка ошибки загрузки изображения
           img.onerror = function() {
             detailImage.textContent = "Фото";
@@ -824,12 +998,76 @@
         }
       }
       
-      detailBreeders.innerHTML = b.breeders.map(x=>(
-        `<div class="breeder">
+      detailBreeders.innerHTML = b.breeders.map(x=>{
+        const links = [];
+        
+        // Добавляем Instagram ссылку
+        if (x.ig) {
+          links.push(`<a class="link" target="_blank" href="https://instagram.com/${x.ig.replace('@','')}" rel="noopener noreferrer">📷 ${x.ig}</a>`);
+        }
+        
+        // Добавляем ссылку на сайт
+        if (x.website) {
+          links.push(`<a class="link" target="_blank" href="${x.website}" rel="noopener noreferrer">🌐 Сайт</a>`);
+        }
+        
+        return `<div class="breeder">
           <span>${x.name}</span>
-          <a class="link" target="_blank" href="https://instagram.com/${x.ig.replace('@','')}" rel="noopener noreferrer">${x.ig}</a>
-        </div>`
-      )).join("");
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px;">
+            ${links.join('')}
+          </div>
+        </div>`;
+      }).join("");
+      
+      // Добавляем кнопку бронирования в детальный просмотр (только если её еще нет)
+      const breedersBox = detailBreeders.closest('.box');
+      if (breedersBox) {
+        // Проверяем, есть ли уже кнопка бронирования
+        let detailBookingContainer = breedersBox.querySelector('.detail-booking-container');
+        
+        if (!detailBookingContainer) {
+          // Создаем контейнер для кнопки только если его нет
+          detailBookingContainer = document.createElement('div');
+          detailBookingContainer.className = 'detail-booking-container';
+          detailBookingContainer.style.cssText = 'margin-top: 20px; text-align: center;';
+          
+          const detailBookingBtn = document.createElement('button');
+          detailBookingBtn.id = 'detail-booking-btn';
+          detailBookingBtn.className = 'btn btn--primary booking-btn';
+          detailBookingBtn.textContent = 'Выбрать';
+          detailBookingBtn.style.cssText = 'width: 100%; max-width: 300px;';
+          
+          detailBookingBtn.addEventListener('click', () => {
+            if (window.SupabaseCats && window.SupabaseCats.showBookingModal) {
+              window.SupabaseCats.showBookingModal(b);
+            }
+          });
+          
+          detailBookingContainer.appendChild(detailBookingBtn);
+          breedersBox.appendChild(detailBookingContainer);
+        }
+        
+        // Обновляем атрибуты кнопки для текущей кошки
+        const detailBookingBtn = detailBookingContainer.querySelector('#detail-booking-btn');
+        if (detailBookingBtn) {
+          detailBookingBtn.setAttribute('data-cat-id', b.id);
+          
+          // Обновляем состояние кнопки
+          const email = window.SupabaseCats ? window.SupabaseCats.getCurrentUserEmail() : '';
+          if (email && window.SupabaseCats && window.SupabaseCats.isCatBookedByEmail) {
+            if (window.SupabaseCats.isCatBookedByEmail(b.id, email)) {
+              detailBookingBtn.textContent = 'Забронировано';
+              detailBookingBtn.disabled = true;
+              detailBookingBtn.classList.add('booked');
+            } else {
+              detailBookingBtn.textContent = 'Выбрать';
+              detailBookingBtn.disabled = false;
+              detailBookingBtn.classList.remove('booked');
+            }
+          }
+        }
+      }
+      
       show("detail");
     }
 
@@ -940,7 +1178,13 @@
     byId("to-quiz-top").onclick=()=>{renderQuiz(); show("quiz")};
     byId("back-main-from-quiz").onclick=()=>show("main");
     byId("show-results").onclick=resultsFromQuiz;
-    byId("reset-quiz").onclick=()=>renderQuiz();
+    byId("reset-quiz").onclick=()=>{
+      renderQuiz();
+      // Очищаем результаты при сбросе
+      if (resultsGrid) {
+        resultsGrid.innerHTML = "";
+      }
+    };
     
     // Compact category icon event listeners
     document.addEventListener('DOMContentLoaded', function() {
@@ -1074,7 +1318,7 @@
       const categoryImages = {
         longhair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png',
         shorthair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/short-haired.png',
-        hairless: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.jpg',
+        hairless: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.png',
         exotic: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/exotic.png'
       };
       

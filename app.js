@@ -114,7 +114,7 @@ function loadCategoryImages(cats) {
   
   // Специальные изображения для конкретных пород
   const breedSpecificImages = {
-    persian: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/pers_.png'
+    persian: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/pers.png'
   };
   
   // Собираем изображения для каждой категории
@@ -145,7 +145,7 @@ function loadCategoryImages(cats) {
       const fallbackImages = {
         longhair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png',
         shorthair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/short-haired.png',
-        hairless: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.jpg',
+        hairless: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.png',
         exotic: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/exotic.png'
       };
       
@@ -421,6 +421,9 @@ function showConnectionError(error) {
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM загружен, инициализируем Supabase...');
   
+  // Инициализируем систему бронирования
+  initBookingSystem();
+  
   // Сначала тестируем подключение
   testSupabaseConnection().then(isConnected => {
     if (isConnected) {
@@ -486,7 +489,7 @@ window.setCategoryImages = function() {
     const fallbackImages = {
       longhair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png',
       shorthair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/short-haired.png',
-      hairless: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.jpg',
+      hairless: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.png',
       exotic: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/exotic.png'
     };
     
@@ -585,6 +588,454 @@ window.testSupabaseData = async function() {
   }
 };
 
+// Функция для принудительного обновления всех изображений из Supabase
+window.updateAllImagesFromSupabase = async function() {
+  console.log('🔄 Принудительно обновляем все изображения из Supabase...');
+  
+  try {
+    const { data: cats, error } = await supabaseClient
+      .from('cats')
+      .select('name, breed, description, image_url');
+    
+    if (error) {
+      console.error('Ошибка при загрузке данных:', error);
+      return false;
+    }
+    
+    console.log('✅ Данные загружены из Supabase:', cats);
+    
+    // Обновляем главное изображение
+    const heroCat = cats.find(cat => cat.breed === 'hero');
+    if (heroCat && heroCat.image_url) {
+      console.log('🖼️ Обновляем главное изображение:', heroCat.image_url);
+      displayHeroImage(heroCat);
+    }
+    
+    // Обновляем изображения категорий
+    console.log('📂 Обновляем изображения категорий...');
+    loadCategoryImages(cats);
+    
+    // Обновляем изображения пород в основном коде
+    console.log('🐱 Обновляем изображения пород...');
+    updateBreedImagesInMainCode(cats);
+    
+    // Обновляем карточки кошек из базы данных
+    const otherCats = cats.filter(cat => cat.breed !== 'hero' && !isCategoryBreed(cat.breed));
+    if (otherCats.length > 0) {
+      console.log('📋 Обновляем карточки кошек из базы данных...');
+      displayCatsFromDatabase(otherCats);
+    }
+    
+    console.log('✅ Все изображения успешно обновлены из Supabase!');
+    showNotification('Изображения обновлены из Supabase!');
+    return true;
+    
+  } catch (error) {
+    console.error('❌ Ошибка при обновлении изображений:', error);
+    showNotification('Ошибка при обновлении изображений');
+    return false;
+  }
+};
+
+// Функция для принудительного обновления всех изображений на PNG без фона
+window.forceUpdateToPNGImages = function() {
+  console.log('🔄 Принудительно обновляем все изображения на PNG без фона...');
+  
+  // Обновляем изображения пород в данных приложения
+  if (window.appData && window.appData.breeds) {
+    const pngImageUrls = {
+      'maine_coon': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/main-kun.png',
+      'siberian': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/siberian.png',
+      'persian': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/pers.png',
+      'british': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/british.png',
+      'russian_blue': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/russian_blue.png',
+      'abyssinian': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/abissin.png',
+      'sphynx': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/sfinks.png',
+      'bengal': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/bengal.png',
+      'toyger': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/toiger.png'
+    };
+    
+    window.appData.breeds.forEach(breed => {
+      if (pngImageUrls[breed.id]) {
+        console.log(`🖼️ Обновляем изображение для ${breed.name}: ${pngImageUrls[breed.id]}`);
+        breed.image = pngImageUrls[breed.id];
+      }
+    });
+  }
+  
+  // Обновляем изображения категорий
+  const categoryImages = {
+    longhair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/long-haired.png',
+    shorthair: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/short-haired.png',
+    hairless: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/hairless.png',
+    exotic: 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/exotic.png'
+  };
+  
+  window.categoryImages = categoryImages;
+  
+  // Обновляем карточки категорий
+  if (typeof updateCategoryCardsWithImages === 'function') {
+    updateCategoryCardsWithImages();
+  }
+  
+  console.log('✅ Все изображения обновлены на PNG без фона!');
+  showNotification('Изображения обновлены на PNG без фона!');
+};
+
+// Функция для обновления изображений пород в основном коде
+function updateBreedImagesInMainCode(cats) {
+  console.log('🔄 Обновляем изображения пород в основном коде...');
+  
+  // Сопоставление пород с их ID в основном коде
+  const breedMapping = {
+    'maine_coon': 'main-kun.png',
+    'siberian': 'siberian.png', 
+    'persian': 'pers.png',
+    'british': 'british.png',
+    'russian_blue': 'russian_blue.png',
+    'abyssinian': 'abissin.png',
+    'sphynx': 'sfinks.png',
+    'bengal': 'bengal.png',
+    'toyger': 'toiger.png'
+  };
+  
+  // Обновляем изображения в данных приложения
+  if (window.appData && window.appData.breeds) {
+    window.appData.breeds.forEach(breed => {
+      const cat = cats.find(c => c.breed === breed.id);
+      if (cat && cat.image_url) {
+        console.log(`🖼️ Обновляем изображение для ${breed.name}: ${cat.image_url}`);
+        breed.image = cat.image_url;
+      }
+    });
+  }
+  
+  console.log('✅ Изображения пород в основном коде обновлены');
+}
+
+// ===== ФУНКЦИИ БРОНИРОВАНИЯ КОШЕК =====
+
+// Переменная для хранения текущей выбранной кошки
+let currentSelectedCat = null;
+
+// Функция для показа модального окна бронирования
+function showBookingModal(cat) {
+  currentSelectedCat = cat;
+  
+  const modal = document.getElementById('booking-modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalCatInfo = document.getElementById('modal-cat-info');
+  const emailInput = document.getElementById('booking-email');
+  const emailError = document.getElementById('email-error');
+  
+  if (!modal || !modalTitle || !modalCatInfo || !emailInput || !emailError) {
+    console.error('Элементы модального окна не найдены');
+    return;
+  }
+  
+  // Заполняем информацию о кошке
+  modalTitle.textContent = `Забронировать ${cat.name}`;
+  modalCatInfo.textContent = `Вы хотите забронировать кошку породы ${cat.name}. Введите ваш email для связи.`;
+  
+  // Очищаем форму
+  emailInput.value = '';
+  emailError.style.display = 'none';
+  emailError.textContent = '';
+  
+  // Показываем модальное окно
+  modal.style.display = 'flex';
+  
+  // Фокусируемся на поле email
+  setTimeout(() => {
+    emailInput.focus();
+  }, 100);
+}
+
+// Функция для скрытия модального окна
+function hideBookingModal() {
+  const modal = document.getElementById('booking-modal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+  currentSelectedCat = null;
+}
+
+// Функция валидации email
+function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+// Функция для проверки, забронирована ли уже кошка этим email
+function isCatBookedByEmail(catId, email) {
+  const bookings = getBookingsFromStorage();
+  return bookings.some(booking => 
+    booking.cat_id === catId && booking.email === email
+  );
+}
+
+// Функция для получения бронирований из localStorage
+function getBookingsFromStorage() {
+  try {
+    const bookings = localStorage.getItem('cat_bookings');
+    return bookings ? JSON.parse(bookings) : [];
+  } catch (error) {
+    console.error('Ошибка при чтении бронирований из localStorage:', error);
+    return [];
+  }
+}
+
+// Функция для сохранения бронирования в localStorage
+function saveBookingToStorage(booking) {
+  try {
+    const bookings = getBookingsFromStorage();
+    bookings.push(booking);
+    localStorage.setItem('cat_bookings', JSON.stringify(bookings));
+  } catch (error) {
+    console.error('Ошибка при сохранении бронирования в localStorage:', error);
+  }
+}
+
+// Функция для сохранения бронирования в Supabase
+async function saveBookingToSupabase(catId, catName, email) {
+  try {
+    console.log('Сохраняем бронирование в Supabase:', { catId, catName, email });
+    
+    const { data, error } = await supabaseClient
+      .from('bookings')
+      .insert([
+        {
+          cat_id: catId,
+          cat_name: catName,
+          email: email
+        }
+      ]);
+    
+    if (error) {
+      console.error('Ошибка при сохранении в Supabase:', error);
+      throw error;
+    }
+    
+    console.log('Бронирование успешно сохранено в Supabase:', data);
+    return data;
+  } catch (error) {
+    console.error('Ошибка при сохранении бронирования:', error);
+    throw error;
+  }
+}
+
+// Функция для обработки отправки формы бронирования
+async function handleBookingSubmit(event) {
+  event.preventDefault();
+  
+  const emailInput = document.getElementById('booking-email');
+  const emailError = document.getElementById('email-error');
+  const submitButton = document.getElementById('modal-submit');
+  
+  if (!emailInput || !emailError || !submitButton || !currentSelectedCat) {
+    console.error('Не найдены необходимые элементы для бронирования');
+    return;
+  }
+  
+  const email = emailInput.value.trim();
+  
+  // Валидация email
+  if (!email) {
+    emailError.textContent = 'Пожалуйста, введите email';
+    emailError.style.display = 'block';
+    return;
+  }
+  
+  if (!validateEmail(email)) {
+    emailError.textContent = 'Пожалуйста, введите корректный email';
+    emailError.style.display = 'block';
+    return;
+  }
+  
+  // Проверяем, не забронирована ли уже эта кошка этим email
+  if (isCatBookedByEmail(currentSelectedCat.id, email)) {
+    emailError.textContent = 'Вы уже забронировали эту кошку с этим email';
+    emailError.style.display = 'block';
+    return;
+  }
+  
+  // Скрываем ошибку
+  emailError.style.display = 'none';
+  
+  // Блокируем кнопку отправки
+  submitButton.disabled = true;
+  submitButton.textContent = 'Сохраняем...';
+  
+  try {
+    // Сохраняем в Supabase
+    await saveBookingToSupabase(currentSelectedCat.id, currentSelectedCat.name, email);
+    
+    // Сохраняем email в localStorage для будущих проверок
+    localStorage.setItem('last_booking_email', email);
+    
+    // Сохраняем в localStorage для отслеживания состояния
+    const booking = {
+      cat_id: currentSelectedCat.id,
+      cat_name: currentSelectedCat.name,
+      email: email,
+      created_at: new Date().toISOString()
+    };
+    saveBookingToStorage(booking);
+    
+    // Показываем уведомление об успехе
+    alert(`Спасибо! Вы забронировали кошку ${currentSelectedCat.name}`);
+    
+    // Скрываем модальное окно
+    hideBookingModal();
+    
+    // Обновляем состояние кнопок
+    updateBookingButtons();
+    
+  } catch (error) {
+    console.error('Ошибка при бронировании:', error);
+    emailError.textContent = 'Произошла ошибка при сохранении. Попробуйте еще раз.';
+    emailError.style.display = 'block';
+  } finally {
+    // Разблокируем кнопку
+    submitButton.disabled = false;
+    submitButton.textContent = 'Забронировать';
+  }
+}
+
+// Функция для обновления состояния кнопок бронирования
+function updateBookingButtons() {
+  const email = getCurrentUserEmail();
+  
+  if (!email) {
+    console.log('Нет email для обновления кнопок');
+    return;
+  }
+  
+  console.log('Обновляем кнопки для email:', email);
+  
+  // Обновляем все кнопки бронирования на странице
+  const allBookingButtons = document.querySelectorAll('.booking-btn');
+  allBookingButtons.forEach(button => {
+    const catId = button.getAttribute('data-cat-id');
+    
+    if (catId && isCatBookedByEmail(catId, email)) {
+      button.textContent = 'Забронировано';
+      button.disabled = true;
+      button.classList.add('booked');
+      console.log(`Кнопка для кошки ${catId} заблокирована`);
+    } else {
+      button.textContent = 'Выбрать';
+      button.disabled = false;
+      button.classList.remove('booked');
+    }
+  });
+}
+
+// Функция для получения текущего email пользователя (из localStorage или формы)
+function getCurrentUserEmail() {
+  // Сначала пытаемся получить из localStorage
+  const lastEmail = localStorage.getItem('last_booking_email');
+  if (lastEmail) {
+    return lastEmail;
+  }
+  
+  // Если нет в localStorage, берем из формы
+  const emailInput = document.getElementById('booking-email');
+  return emailInput ? emailInput.value.trim() : '';
+}
+
+// Функция для добавления кнопки бронирования к карточке кошки
+function addBookingButtonToCard(card, cat) {
+  // Проверяем, есть ли уже кнопка бронирования
+  let bookingBtn = card.querySelector('.booking-btn');
+  
+  if (!bookingBtn) {
+    bookingBtn = document.createElement('button');
+    bookingBtn.className = 'booking-btn btn btn--primary';
+    bookingBtn.textContent = 'Выбрать';
+    bookingBtn.setAttribute('data-cat-id', cat.id);
+    bookingBtn.style.cssText = `
+      margin-top: 8px;
+      width: 100%;
+    `;
+    
+    // Добавляем обработчик клика
+    bookingBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Предотвращаем открытие детального просмотра
+      showBookingModal(cat);
+    });
+    
+    // Добавляем кнопку к карточке
+    card.appendChild(bookingBtn);
+  }
+  
+  // Обновляем состояние кнопки
+  const email = getCurrentUserEmail();
+  if (email && isCatBookedByEmail(cat.id, email)) {
+    bookingBtn.textContent = 'Забронировано';
+    bookingBtn.disabled = true;
+    bookingBtn.classList.add('booked');
+  } else {
+    bookingBtn.textContent = 'Выбрать';
+    bookingBtn.disabled = false;
+    bookingBtn.classList.remove('booked');
+  }
+}
+
+// Инициализация функций бронирования
+function initBookingSystem() {
+  console.log('Инициализируем систему бронирования...');
+  
+  // Обработчики для модального окна
+  const modal = document.getElementById('booking-modal');
+  const modalClose = document.getElementById('modal-close');
+  const modalCancel = document.getElementById('modal-cancel');
+  const bookingForm = document.getElementById('booking-form');
+  
+  if (modalClose) {
+    modalClose.addEventListener('click', hideBookingModal);
+  }
+  
+  if (modalCancel) {
+    modalCancel.addEventListener('click', hideBookingModal);
+  }
+  
+  if (bookingForm) {
+    bookingForm.addEventListener('submit', handleBookingSubmit);
+  }
+  
+  // Закрытие модального окна при клике вне его
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        hideBookingModal();
+      }
+    });
+  }
+  
+  // Закрытие модального окна по Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && modal.style.display === 'flex') {
+      hideBookingModal();
+    }
+  });
+  
+  console.log('Система бронирования инициализирована');
+  
+  // Обновляем состояние кнопок при инициализации
+  setTimeout(() => {
+    updateBookingButtons();
+  }, 1000);
+  
+  // Добавляем глобальную функцию для сброса бронирований (для отладки)
+  window.resetBookings = function() {
+    localStorage.removeItem('cat_bookings');
+    localStorage.removeItem('last_booking_email');
+    console.log('Бронирования сброшены');
+    updateBookingButtons();
+  };
+}
+
 // Экспортируем функции для использования в других частях приложения
 window.SupabaseCats = {
   loadCatsFromDatabase,
@@ -599,5 +1050,19 @@ window.SupabaseCats = {
   testSupabaseData,
   setHeroImage,
   setCategoryImages,
-  setLonghairImage
+  setLonghairImage,
+  updateAllImagesFromSupabase,
+  updateBreedImagesInMainCode,
+  forceUpdateToPNGImages,
+  // Новые функции бронирования
+  showBookingModal,
+  hideBookingModal,
+  validateEmail,
+  saveBookingToSupabase,
+  handleBookingSubmit,
+  updateBookingButtons,
+  addBookingButtonToCard,
+  initBookingSystem,
+  isCatBookedByEmail,
+  getCurrentUserEmail
 };
