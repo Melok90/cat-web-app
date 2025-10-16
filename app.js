@@ -1,12 +1,23 @@
 // Supabase integration for cat photos and data
 // Подключение к Supabase через CDN
-const { createClient } = supabase;
+let supabaseClient;
 
-// Инициализация Supabase клиента
+// Инициализируем Supabase клиент после загрузки
+function initSupabaseClient() {
+  if (typeof supabase !== 'undefined') {
+    const { createClient } = supabase;
+    supabaseClient = createClient(supabaseUrl, supabaseKey);
+    console.log('✅ Supabase клиент инициализирован');
+    return true;
+  } else {
+    console.error('❌ Supabase CDN не загружен');
+    return false;
+  }
+}
+
+// Конфигурация Supabase
 const supabaseUrl = 'https://zrntpatdzumhybclhrhp.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpybnRwYXRkenVtaHliY2xocmhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzMTcyNjQsImV4cCI6MjA3NDg5MzI2NH0.rjsuoG_f1nuLAD8ahZF7pwvkYfMnTxxXybS4GYwoTqw';
-
-const supabaseClient = createClient(supabaseUrl, supabaseKey);
 
 // Функция для загрузки кошек из базы данных
 async function loadCatsFromDatabase() {
@@ -267,6 +278,11 @@ function createCatCard(cat) {
   const card = document.createElement('article');
   card.className = 'card';
   
+  // Добавляем уникальный ID для кошки, если его нет
+  if (!cat.id) {
+    cat.id = `cat_${cat.breed}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+  
   // Изображение кошки
   const imageContainer = document.createElement('div');
   imageContainer.className = 'ph';
@@ -297,24 +313,15 @@ function createCatCard(cat) {
   descriptionElement.className = 'muted';
   descriptionElement.textContent = cat.description || 'Описание не указано';
   
-  // Кнопка "Выбрать"
-  const selectButton = document.createElement('button');
-  selectButton.textContent = 'Выбрать';
-  selectButton.className = 'btn btn--primary';
-  selectButton.style.cssText = `
-    margin-top: 8px;
-  `;
-  
-  // Обработчик клика на кнопку "Выбрать"
-  selectButton.addEventListener('click', () => {
-    selectCat(cat);
-  });
-  
   // Собираем карточку
   card.appendChild(imageContainer);
   card.appendChild(nameElement);
   card.appendChild(descriptionElement);
-  card.appendChild(selectButton);
+  
+  // Добавляем кнопку бронирования (асинхронно)
+  addBookingButtonToCard(card, cat).catch(error => {
+    console.error('Ошибка при добавлении кнопки бронирования:', error);
+  });
   
   return card;
 }
@@ -323,11 +330,8 @@ function createCatCard(cat) {
 function selectCat(cat) {
   console.log('Выбрана кошка:', cat);
   
-  // Здесь можно добавить логику для обработки выбора кошки
-  // Например, показать модальное окно, добавить в корзину и т.д.
-  
-  // Показываем уведомление
-  showNotification(`Вы выбрали: ${cat.name}`);
+  // Показываем модальное окно бронирования
+  showBookingModal(cat);
 }
 
 // Функция для показа уведомлений
@@ -421,22 +425,27 @@ function showConnectionError(error) {
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM загружен, инициализируем Supabase...');
   
-  // Инициализируем систему бронирования
-  initBookingSystem();
-  
-  // Сначала тестируем подключение
-  testSupabaseConnection().then(isConnected => {
-    if (isConnected) {
-      // Если подключение успешно, загружаем кошек
-      loadCatsFromDatabase();
-    } else {
-      // Если подключение не удалось, устанавливаем главное изображение принудительно
-      console.log('Подключение к Supabase не удалось, устанавливаем главное изображение принудительно');
-      setTimeout(() => {
-        window.setHeroImage();
-      }, 1000);
-    }
-  });
+  // Инициализируем Supabase клиент
+  if (initSupabaseClient()) {
+    // Инициализируем систему бронирования
+    initBookingSystem();
+    
+    // Сначала тестируем подключение
+    testSupabaseConnection().then(isConnected => {
+      if (isConnected) {
+        // Если подключение успешно, загружаем кошек
+        loadCatsFromDatabase();
+      } else {
+        // Если подключение не удалось, устанавливаем главное изображение принудительно
+        console.log('Подключение к Supabase не удалось, устанавливаем главное изображение принудительно');
+        setTimeout(() => {
+          window.setHeroImage();
+        }, 1000);
+      }
+    });
+  } else {
+    console.error('Не удалось инициализировать Supabase клиент');
+  }
   
   // Дополнительная проверка через 3 секунды
   setTimeout(() => {
@@ -766,12 +775,67 @@ function validateEmail(email) {
   return emailRegex.test(email);
 }
 
+// Функция для получения бронирований из Supabase
+async function getBookingsFromSupabase() {
+  try {
+    console.log('🔄 Загружаем бронирования из Supabase...');
+    
+    // Проверяем, что supabaseClient инициализирован
+    if (!supabaseClient) {
+      console.error('❌ Supabase клиент не инициализирован');
+      return [];
+    }
+    
+    const { data: bookings, error } = await supabaseClient
+      .from('bookings')
+      .select('cat_id, cat_name, email, created_at')
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error('❌ Ошибка при загрузке бронирований из Supabase:', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+        fullError: error
+      });
+      return [];
+    }
+    
+    console.log('✅ Загружены бронирования из Supabase:', bookings);
+    return bookings || [];
+  } catch (error) {
+    console.error('❌ Критическая ошибка при подключении к Supabase для загрузки бронирований:', {
+      message: error.message,
+      stack: error.stack,
+      fullError: error
+    });
+    return [];
+  }
+}
+
 // Функция для проверки, забронирована ли уже кошка этим email
-function isCatBookedByEmail(catId, email) {
-  const bookings = getBookingsFromStorage();
-  return bookings.some(booking => 
+async function isCatBookedByEmail(catId, email) {
+  // Сначала проверяем localStorage
+  const localBookings = getBookingsFromStorage();
+  const isBookedLocally = localBookings.some(booking => 
     booking.cat_id === catId && booking.email === email
   );
+  
+  if (isBookedLocally) {
+    return true;
+  }
+  
+  // Затем проверяем Supabase
+  try {
+    const supabaseBookings = await getBookingsFromSupabase();
+    return supabaseBookings.some(booking => 
+      booking.cat_id === catId && booking.email === email
+    );
+  } catch (error) {
+    console.error('Ошибка при проверке бронирований в Supabase:', error);
+    return false;
+  }
 }
 
 // Функция для получения бронирований из localStorage
@@ -799,27 +863,50 @@ function saveBookingToStorage(booking) {
 // Функция для сохранения бронирования в Supabase
 async function saveBookingToSupabase(catId, catName, email) {
   try {
-    console.log('Сохраняем бронирование в Supabase:', { catId, catName, email });
+    console.log('🔄 Сохраняем бронирование в Supabase:', { catId, catName, email });
+    
+    // Проверяем, что supabaseClient инициализирован
+    if (!supabaseClient) {
+      throw new Error('Supabase клиент не инициализирован');
+    }
+    
+    // Проверяем входные данные
+    if (!catId || !catName || !email) {
+      throw new Error('Не все обязательные поля заполнены');
+    }
+    
+    const bookingData = {
+      cat_id: catId,
+      cat_name: catName,
+      email: email
+    };
+    
+    console.log('📤 Отправляем данные в Supabase:', bookingData);
     
     const { data, error } = await supabaseClient
       .from('bookings')
-      .insert([
-        {
-          cat_id: catId,
-          cat_name: catName,
-          email: email
-        }
-      ]);
+      .insert([bookingData])
+      .select();
     
     if (error) {
-      console.error('Ошибка при сохранении в Supabase:', error);
+      console.error('❌ Ошибка при сохранении в Supabase:', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint,
+        fullError: error
+      });
       throw error;
     }
     
-    console.log('Бронирование успешно сохранено в Supabase:', data);
+    console.log('✅ Бронирование успешно сохранено в Supabase:', data);
     return data;
   } catch (error) {
-    console.error('Ошибка при сохранении бронирования:', error);
+    console.error('❌ Критическая ошибка при сохранении бронирования:', {
+      message: error.message,
+      stack: error.stack,
+      fullError: error
+    });
     throw error;
   }
 }
@@ -853,7 +940,8 @@ async function handleBookingSubmit(event) {
   }
   
   // Проверяем, не забронирована ли уже эта кошка этим email
-  if (isCatBookedByEmail(currentSelectedCat.id, email)) {
+  const isAlreadyBooked = await isCatBookedByEmail(currentSelectedCat.id, email);
+  if (isAlreadyBooked) {
     emailError.textContent = 'Вы уже забронировали эту кошку с этим email';
     emailError.style.display = 'block';
     return;
@@ -867,11 +955,11 @@ async function handleBookingSubmit(event) {
   submitButton.textContent = 'Сохраняем...';
   
   try {
-    // Сохраняем в Supabase
-    await saveBookingToSupabase(currentSelectedCat.id, currentSelectedCat.name, email);
-    
     // Сохраняем email в localStorage для будущих проверок
     localStorage.setItem('last_booking_email', email);
+    
+    // Сохраняем в Supabase
+    await saveBookingToSupabase(currentSelectedCat.id, currentSelectedCat.name, email);
     
     // Сохраняем в localStorage для отслеживания состояния
     const booking = {
@@ -889,7 +977,9 @@ async function handleBookingSubmit(event) {
     hideBookingModal();
     
     // Обновляем состояние кнопок
-    updateBookingButtons();
+    updateBookingButtons().catch(error => {
+      console.error('Ошибка при обновлении кнопок:', error);
+    });
     
   } catch (error) {
     console.error('Ошибка при бронировании:', error);
@@ -903,7 +993,7 @@ async function handleBookingSubmit(event) {
 }
 
 // Функция для обновления состояния кнопок бронирования
-function updateBookingButtons() {
+async function updateBookingButtons() {
   const email = getCurrentUserEmail();
   
   if (!email) {
@@ -915,20 +1005,24 @@ function updateBookingButtons() {
   
   // Обновляем все кнопки бронирования на странице
   const allBookingButtons = document.querySelectorAll('.booking-btn');
-  allBookingButtons.forEach(button => {
+  
+  for (const button of allBookingButtons) {
     const catId = button.getAttribute('data-cat-id');
     
-    if (catId && isCatBookedByEmail(catId, email)) {
-      button.textContent = 'Забронировано';
-      button.disabled = true;
-      button.classList.add('booked');
-      console.log(`Кнопка для кошки ${catId} заблокирована`);
-    } else {
-      button.textContent = 'Выбрать';
-      button.disabled = false;
-      button.classList.remove('booked');
+    if (catId) {
+      const isBooked = await isCatBookedByEmail(catId, email);
+      if (isBooked) {
+        button.textContent = 'Забронировано';
+        button.disabled = true;
+        button.classList.add('booked');
+        console.log(`Кнопка для кошки ${catId} заблокирована`);
+      } else {
+        button.textContent = 'Выбрать';
+        button.disabled = false;
+        button.classList.remove('booked');
+      }
     }
-  });
+  }
 }
 
 // Функция для получения текущего email пользователя (из localStorage или формы)
@@ -945,7 +1039,7 @@ function getCurrentUserEmail() {
 }
 
 // Функция для добавления кнопки бронирования к карточке кошки
-function addBookingButtonToCard(card, cat) {
+async function addBookingButtonToCard(card, cat) {
   // Проверяем, есть ли уже кнопка бронирования
   let bookingBtn = card.querySelector('.booking-btn');
   
@@ -971,10 +1065,17 @@ function addBookingButtonToCard(card, cat) {
   
   // Обновляем состояние кнопки
   const email = getCurrentUserEmail();
-  if (email && isCatBookedByEmail(cat.id, email)) {
-    bookingBtn.textContent = 'Забронировано';
-    bookingBtn.disabled = true;
-    bookingBtn.classList.add('booked');
+  if (email) {
+    const isBooked = await isCatBookedByEmail(cat.id, email);
+    if (isBooked) {
+      bookingBtn.textContent = 'Забронировано';
+      bookingBtn.disabled = true;
+      bookingBtn.classList.add('booked');
+    } else {
+      bookingBtn.textContent = 'Выбрать';
+      bookingBtn.disabled = false;
+      bookingBtn.classList.remove('booked');
+    }
   } else {
     bookingBtn.textContent = 'Выбрать';
     bookingBtn.disabled = false;
@@ -1024,7 +1125,9 @@ function initBookingSystem() {
   
   // Обновляем состояние кнопок при инициализации
   setTimeout(() => {
-    updateBookingButtons();
+    updateBookingButtons().catch(error => {
+      console.error('Ошибка при обновлении кнопок при инициализации:', error);
+    });
   }, 1000);
   
   // Добавляем глобальную функцию для сброса бронирований (для отладки)
@@ -1032,12 +1135,15 @@ function initBookingSystem() {
     localStorage.removeItem('cat_bookings');
     localStorage.removeItem('last_booking_email');
     console.log('Бронирования сброшены');
-    updateBookingButtons();
+    updateBookingButtons().catch(error => {
+      console.error('Ошибка при обновлении кнопок после сброса:', error);
+    });
   };
 }
 
 // Экспортируем функции для использования в других частях приложения
 window.SupabaseCats = {
+  initSupabaseClient,
   loadCatsFromDatabase,
   displayHeroImage,
   loadCategoryImages,
@@ -1054,11 +1160,13 @@ window.SupabaseCats = {
   updateAllImagesFromSupabase,
   updateBreedImagesInMainCode,
   forceUpdateToPNGImages,
-  // Новые функции бронирования
+  createCatCard,
+  // Функции бронирования
   showBookingModal,
   hideBookingModal,
   validateEmail,
   saveBookingToSupabase,
+  getBookingsFromSupabase,
   handleBookingSubmit,
   updateBookingButtons,
   addBookingButtonToCard,
