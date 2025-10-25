@@ -117,10 +117,10 @@ function loadCategoryImages(cats) {
   
   // Сопоставление категорий с породами из основного кода
   const categoryBreedMapping = {
-    longhair: ['maine_coon', 'siberian', 'persian'],
-    shorthair: ['british', 'russian_blue', 'abyssinian'],
+    longhair: ['maine_coon', 'siberian', 'persian', 'ragdoll', 'norwegian_forest'],
+    shorthair: ['british', 'russian_blue', 'abyssinian', 'scottish_fold'],
     hairless: ['sphynx'],
-    exotic: ['bengal', 'toyger']
+    exotic: ['bengal', 'toyger', 'devon_rex', 'munchkin']
   };
   
   // Специальные изображения для конкретных пород
@@ -573,10 +573,10 @@ window.testSupabaseData = async function() {
     
     // Показываем сопоставление категорий
     const categoryBreedMapping = {
-      longhair: ['maine_coon', 'siberian', 'persian'],
-      shorthair: ['british', 'russian_blue', 'abyssinian'],
+      longhair: ['maine_coon', 'siberian', 'persian', 'ragdoll', 'norwegian_forest'],
+      shorthair: ['british', 'russian_blue', 'abyssinian', 'scottish_fold'],
       hairless: ['sphynx'],
-      exotic: ['bengal', 'toyger']
+      exotic: ['bengal', 'toyger', 'devon_rex', 'munchkin']
     };
     
     Object.keys(categoryBreedMapping).forEach(category => {
@@ -590,6 +590,18 @@ window.testSupabaseData = async function() {
           console.log(`  ✗ ${breed}: не найдено в базе данных`);
         }
       });
+    });
+    
+    // Проверяем новые породы
+    const newBreeds = ['ragdoll', 'scottish_fold', 'norwegian_forest', 'devon_rex', 'munchkin'];
+    console.log('\n🔍 Проверяем новые породы:');
+    newBreeds.forEach(breed => {
+      const cat = cats.find(c => c.breed === breed);
+      if (cat) {
+        console.log(`  ✅ ${breed}: ${cat.name} - ${cat.image_url}`);
+      } else {
+        console.log(`  ❌ ${breed}: не найдено в базе данных`);
+      }
     });
     
   } catch (error) {
@@ -661,7 +673,12 @@ window.forceUpdateToPNGImages = function() {
       'abyssinian': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/abissin.png',
       'sphynx': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/sfinks.png',
       'bengal': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/bengal.png',
-      'toyger': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/toiger.png'
+      'toyger': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/toiger.png',
+      'ragdoll': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/ragdoll.png',
+      'scottish_fold': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/scottish_fold.png',
+      'norwegian_forest': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/norwegian_forest.png',
+      'devon_rex': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/devon_rex.png',
+      'munchkin': 'https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/munchkin.png'
     };
     
     window.appData.breeds.forEach(breed => {
@@ -705,7 +722,12 @@ function updateBreedImagesInMainCode(cats) {
     'abyssinian': 'abissin.png',
     'sphynx': 'sfinks.png',
     'bengal': 'bengal.png',
-    'toyger': 'toiger.png'
+    'toyger': 'toiger.png',
+    'ragdoll': 'ragdoll.png',
+    'scottish_fold': 'scottish_fold.png',
+    'norwegian_forest': 'norwegian_forest.png',
+    'devon_rex': 'devon_rex.png',
+    'munchkin': 'munchkin.png'
   };
   
   // Обновляем изображения в данных приложения
@@ -1141,6 +1163,32 @@ function initBookingSystem() {
   };
 }
 
+// Функция для принудительного обновления всех данных из Supabase
+window.refreshAllDataFromSupabase = async function() {
+  console.log('🔄 Принудительно обновляем все данные из Supabase...');
+  
+  try {
+    // Загружаем данные из Supabase
+    await loadCatsFromDatabase();
+    
+    // Обновляем изображения пород в основном коде
+    const { data: cats, error } = await supabaseClient
+      .from('cats')
+      .select('name, breed, description, image_url');
+    
+    if (!error && cats) {
+      updateBreedImagesInMainCode(cats);
+      console.log('✅ Все данные обновлены из Supabase!');
+      showNotification('Данные обновлены из Supabase!');
+    } else {
+      console.error('Ошибка при загрузке данных:', error);
+    }
+  } catch (error) {
+    console.error('Ошибка при обновлении данных:', error);
+    showNotification('Ошибка при обновлении данных');
+  }
+};
+
 // Экспортируем функции для использования в других частях приложения
 window.SupabaseCats = {
   initSupabaseClient,
@@ -1161,6 +1209,7 @@ window.SupabaseCats = {
   updateBreedImagesInMainCode,
   forceUpdateToPNGImages,
   createCatCard,
+  refreshAllDataFromSupabase,
   // Функции бронирования
   showBookingModal,
   hideBookingModal,

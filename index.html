@@ -338,7 +338,7 @@
     }
     
     .quiz{display:flex;flex-direction:column;gap:16px}
-    .q{display:flex;flex-direction:column;gap:10px;background:var(--surface-container);border:1px solid var(--outline-variant);border-radius:12px;padding:14px}
+    .q{display:flex;flex-direction:column;gap:10px;background:var(--surface-container);border:1px solid var(--outline-variant);border-radius:12px;padding:14px;width:100%;max-width:100%;box-sizing:border-box}
     .opts{display:flex;flex-wrap:wrap;gap:10px}
     .opt{padding:10px 12px;border-radius:10px;border:1px solid var(--outline);background:var(--surface-container-low);cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:center;text-align:center;transition:.15s ease;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
     .opt input{display:none}
@@ -349,13 +349,13 @@
     
     /* Mobile optimizations */
     @media (max-width:840px){
-      .card{max-width:422px}
+      .card{max-width:350px;width:100%;margin:0 auto}
       .ph{height:180px;padding:6px}
       .title{font-size:28px}
       .hero-image{max-width:350px;height:240px;object-fit:contain}
       .search-row{flex-direction:column;align-items:center}
       .search{min-width:auto;max-width:300px;width:100%}
-      .btn{width:100%;justify-content:center}
+      .btn{width:100%;justify-content:center;max-width:350px;margin:0 auto}
       .detail-hero{flex-direction:column;gap:8px}
       .hero-img{flex:none;width:100%;max-width:422px}
       .cols{flex-direction:column}
@@ -365,6 +365,24 @@
       .opt{width:100%;min-height:48px;padding:12px 16px;font-size:16px}
       .section-title{text-align:center}
       .grid{justify-content:center}
+      
+      /* Quiz results specific mobile styles */
+      #results-grid .card {
+        max-width: 350px;
+        width: 100%;
+        flex: 1 1 350px;
+        min-width: 280px;
+        margin: 0 auto;
+      }
+      
+      /* Quiz questions should maintain their width */
+      .quiz .q {
+        max-width: 350px;
+        width: 100%;
+        margin: 0 auto;
+        flex: none !important;
+        min-width: auto !important;
+      }
       
       /* Mobile compact category icons */
       .category-icons {
@@ -385,14 +403,34 @@
       header.site{padding:24px 0 8px}
       .title{font-size:24px}
       .hero-image{max-width:300px;height:200px;object-fit:contain}
-      .card{padding:12px}
+      .card{padding:12px;max-width:320px;margin:0 auto}
       .ph{height:160px;padding:4px}
-      .btn{padding:14px 16px;font-size:16px}
+      .btn{padding:14px 16px;font-size:16px;max-width:320px;margin:0 auto}
       .search input{padding:12px 16px 12px 48px;font-size:16px;min-height:44px}
       .topbar{gap:8px}
       .topbar .back{padding:12px 14px}
       .section-title{text-align:center}
       .grid{justify-content:center}
+      
+      /* Quiz results for very small screens */
+      #results-grid .card {
+        max-width: 320px;
+        width: 100%;
+        flex: 1 1 320px;
+        min-width: 280px;
+        padding: 12px;
+        margin: 0 auto;
+      }
+      
+      /* Quiz questions for very small screens */
+      .quiz .q {
+        max-width: 320px;
+        width: 100%;
+        margin: 0 auto;
+        flex: none !important;
+        min-width: auto !important;
+        padding: 12px;
+      }
     }
     
     /* Performance optimizations */
@@ -803,6 +841,83 @@
             {name:"Мини-тигры", ig:"@mini_tigers_cattery"}
           ],
           traits:{experience:"medium", space:"medium", care:"low", activity:"high", children:"high", special_care:"low", exotic:"high"}
+        },
+        
+        // Новые породы кошек
+        {
+          id:"ragdoll", category:"longhair", name:"Рэгдолл",
+          short:"Мягкая и расслабленная порода с голубыми глазами.",
+          origin:"США, Калифорния",
+          suitable:"Для спокойных семей",
+          character:"Очень спокойные, ласковые, расслабленные, хорошо ладят с детьми.",
+          care:"Расчесывать 2-3 раза в неделю, регулярный уход за шерстью.",
+          suitableDetail:"Идеальны для семей с детьми, очень терпеливые и спокойные.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/ragdoll.png",
+          breeders:[
+            {name:"Рэгдолл клуб России", ig:"@ragdoll_russia"},
+            {name:"Небесные ангелы", ig:"@heavenly_ragdolls", website:"https://heavenly-ragdolls.ru"}
+          ],
+          traits:{experience:"low", space:"medium", care:"medium", activity:"low", children:"high", special_care:"low", exotic:"low"}
+        },
+        {
+          id:"scottish_fold", category:"shorthair", name:"Шотландская вислоухая",
+          short:"Очаровательная порода с загнутыми ушками и круглыми глазами.",
+          origin:"Шотландия",
+          suitable:"Для семей с детьми",
+          character:"Дружелюбные, игривые, умные, хорошо адаптируются к новым условиям.",
+          care:"Простой уход, регулярная чистка ушей из-за особого строения.",
+          suitableDetail:"Отлично подходят для семей, любят внимание и игры.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/scottish_fold.png",
+          breeders:[
+            {name:"Шотландские кошки", ig:"@scottish_cats_russia"},
+            {name:"Вислоухие красавицы", ig:"@folded_beauties"}
+          ],
+          traits:{experience:"low", space:"low", care:"medium", activity:"medium", children:"high", special_care:"medium", exotic:"low"}
+        },
+        {
+          id:"norwegian_forest", category:"longhair", name:"Норвежская лесная",
+          short:"Крупная и выносливая порода с густой шерстью и пушистым хвостом.",
+          origin:"Норвегия",
+          suitable:"Для больших домов",
+          character:"Независимые, умные, выносливые, хорошо ладят с другими животными.",
+          care:"Расчесывать 2-3 раза в неделю, особенно в период линьки.",
+          suitableDetail:"Подходят для домов с садом, любят простор и активность.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/norwegian_forest.png",
+          breeders:[
+            {name:"Норвежские лесные", ig:"@norwegian_forest_cats"},
+            {name:"Северные великаны", ig:"@northern_giants", website:"https://northern-giants.ru"}
+          ],
+          traits:{experience:"medium", space:"high", care:"medium", activity:"medium", children:"medium", special_care:"low", exotic:"low"}
+        },
+        {
+          id:"devon_rex", category:"exotic", name:"Девон-рекс",
+          short:"Кудрявая порода с большими ушами и игривым характером.",
+          origin:"Великобритания, Девоншир",
+          suitable:"Для активных семей",
+          character:"Очень активные, игривые, любознательные, нуждаются в внимании.",
+          care:"Минимальный уход за шерстью, но нужны регулярные игры.",
+          suitableDetail:"Идеальны для активных семей, любят игры и общение.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/devon_rex.png",
+          breeders:[
+            {name:"Девон-рекс клуб", ig:"@devon_rex_club"},
+            {name:"Кудрявые ангелы", ig:"@curly_angels"}
+          ],
+          traits:{experience:"medium", space:"medium", care:"low", activity:"high", children:"high", special_care:"low", exotic:"medium"}
+        },
+        {
+          id:"munchkin", category:"exotic", name:"Манчкин",
+          short:"Порода с короткими лапками и длинным телом - кошачья такса.",
+          origin:"США",
+          suitable:"Для любителей необычного",
+          character:"Игривые, любознательные, дружелюбные, хорошо ладят с детьми.",
+          care:"Стандартный уход, но нужно следить за позвоночником.",
+          suitableDetail:"Отлично подходят для квартир, очень игривые и общительные.",
+          image:"https://zrntpatdzumhybclhrhp.supabase.co/storage/v1/object/public/cats/munchkin.png",
+          breeders:[
+            {name:"Манчкин клуб", ig:"@munchkin_cat_club"},
+            {name:"Коротколапые красавцы", ig:"@short_legged_beauties", website:"https://munchkin-cats.ru"}
+          ],
+          traits:{experience:"low", space:"low", care:"low", activity:"medium", children:"high", special_care:"medium", exotic:"high"}
         }
       ],
       questions:[
@@ -1283,7 +1398,23 @@
       if (rated.length > 0) {
         // Use the same renderBreedCards function as search results
         const breeds = rated.map(x => x.breed);
-        renderBreedCards(breeds, resultsGrid, true);
+        renderBreedCards(breeds, resultsGrid, false);
+        
+        // Ensure proper card sizing for mobile devices
+        setTimeout(() => {
+          const cards = resultsGrid.querySelectorAll('.card');
+          cards.forEach(card => {
+            // Apply mobile-specific styles
+            if (window.innerWidth <= 840) {
+              card.style.maxWidth = '350px';
+              card.style.margin = '0 auto';
+            }
+            if (window.innerWidth <= 480) {
+              card.style.maxWidth = '320px';
+              card.style.margin = '0 auto';
+            }
+          });
+        }, 100);
       } else {
         resultsGrid.innerHTML = `<div class="muted">Нет совпадений — поменяйте ответы</div>`;
       }
@@ -1488,11 +1619,14 @@
     function ensureEqualCardSizes() {
       const cards = document.querySelectorAll('.card');
       cards.forEach(card => {
-        // Принудительно устанавливаем одинаковые размеры
-        card.style.minWidth = '280px';
-        card.style.width = '100%';
-        card.style.flex = '1 1 280px';
-        card.style.maxWidth = 'calc(50% - var(--gap-6)/2)';
+        // Проверяем, что это не элемент квиза
+        if (!card.closest('.quiz')) {
+          // Принудительно устанавливаем одинаковые размеры
+          card.style.minWidth = '280px';
+          card.style.width = '100%';
+          card.style.flex = '1 1 280px';
+          card.style.maxWidth = 'calc(50% - var(--gap-6)/2)';
+        }
       });
       console.log('Размеры всех карточек унифицированы');
     }
